@@ -3,13 +3,4 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
          version="6.0">
-  <servlet>
-    <servlet-name>Main</servlet-name>
-    <servlet-class>Main</servlet-class>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>Main</servlet-name>
-    <url-pattern>/main</url-pattern>
-  </servlet-mapping>
 </web-app>
