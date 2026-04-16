@@ -15,7 +15,7 @@
     }
 %>
 <%
-    String username = (String) session.getAttribute(AuthConstants.SESSION_USER_KEY);
+    String username = (String) request.getAttribute(AuthConstants.AUTH_USER_KEY);
     if (username == null || username.isBlank()) {
         response.sendRedirect(request.getContextPath() + "/auth/login");
         return;
@@ -54,7 +54,7 @@
     <section class="rounded-2xl border border-slate-200 bg-white p-6">
         <h2 class="text-lg font-semibold">You are signed in</h2>
         <p class="mt-2 text-sm text-slate-600">
-            Login and logout are now handled through servlet sessions backed by MariaDB user accounts.
+            Login and logout are now handled through JWT tokens backed by MariaDB user accounts.
         </p>
     </section>
 </main>

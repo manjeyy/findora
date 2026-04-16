@@ -1,4 +1,26 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%!
+    private String escapeHtml(String value) {
+        if (value == null) {
+            return "";
+        }
+
+        return value
+                .replace("&", "&amp;")
+                .replace("<", "&lt;")
+                .replace(">", "&gt;")
+                .replace("\"", "&quot;")
+                .replace("'", "&#39;");
+    }
+%>
+<%
+    String error = (String) request.getAttribute("error");
+    String username = (String) request.getAttribute("username");
+
+    if (username == null) {
+        username = "";
+    }
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,19 +47,20 @@
             <p class="mt-2 text-sm text-slate-600">Use your account to continue to your dashboard.</p>
         </div>
 
+        <% if (error != null && !error.isBlank()) { %>
         <div class="mb-4 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700">
+            <%= error %>
         </div>
-        <div class="mb-4 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700">
-        </div>
+        <% } %>
 
-        <form class="space-y-5" method="post" action="/auth/login">
+        <form class="space-y-5" method="post" action="<%= request.getContextPath() %>/auth/login">
             <div>
                 <label for="username" class="mb-1 block text-sm font-semibold text-slate-700">Username</label>
                 <input
                         id="username"
                         name="username"
                         type="text"
-                        value=""
+                        value="<%= escapeHtml(username) %>"
                         autocomplete="username"
                         required
                         class="w-full rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm outline-none ring-sky-500 transition focus:ring-2"
@@ -66,7 +89,8 @@
 
         <p class="mt-6 text-center text-sm text-slate-600">
             Need an account?
-            <a class="font-semibold text-sky-700 underline-offset-2 hover:underline">Create one</a>
+            <a href="<%= request.getContextPath() %>/auth/register"
+               class="font-semibold text-sky-700 underline-offset-2 hover:underline">Create one</a>
         </p>
     </section>
 </main>

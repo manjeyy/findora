@@ -1,4 +1,18 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%!
+    private String escapeHtml(String value) {
+        if (value == null) {
+            return "";
+        }
+
+        return value
+                .replace("&", "&amp;")
+                .replace("<", "&lt;")
+                .replace(">", "&gt;")
+                .replace("\"", "&quot;")
+                .replace("'", "&#39;");
+    }
+%>
 <%
     String error = (String) request.getAttribute("error");
     String username = (String) request.getAttribute("username");
@@ -40,7 +54,7 @@
 
         <% if (error != null && !error.isBlank()) { %>
         <div class="mb-4 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700">
-            <%= error %>
+            <%= escapeHtml(error) %>
         </div>
         <% } %>
 
@@ -51,7 +65,7 @@
                         id="username"
                         name="username"
                         type="text"
-                        value="<%= username %>"
+                        value="<%= escapeHtml(username) %>"
                         autocomplete="username"
                         required
                         class="w-full rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm outline-none ring-sky-500 transition focus:ring-2"
@@ -64,7 +78,7 @@
                         id="email"
                         name="email"
                         type="email"
-                        value="<%= email %>"
+                        value="<%= escapeHtml(email) %>"
                         autocomplete="email"
                         required
                         class="w-full rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm outline-none ring-sky-500 transition focus:ring-2"

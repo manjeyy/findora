@@ -7,14 +7,14 @@ import java.util.regex.Pattern;
 
 import org.mindrot.jbcrypt.BCrypt;
 
-import com.landf.features.auth.AuthConstants;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import com.landf.features.auth.JwtService;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 
 @WebServlet(urlPatterns = {"/auth/login", "/auth/register", "/auth/logout", "/dashboard"})
 public class UserController extends HttpServlet {
@@ -28,32 +28,25 @@ public class UserController extends HttpServlet {
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$");
 
     private final UserDAO userDAO = new UserDAO();
+    private final JwtService jwtService = new JwtService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         switch (request.getServletPath()) {
-            case "/auth/login" ->
-                forward(LOGIN_VIEW, request, response);
-            case "/auth/register" ->
-                forward(REGISTER_VIEW, request, response);
-            case "/auth/logout" ->
-                handleLogout(request, response);
-            case "/dashboard" ->
-                handleDashboard(request, response);
-            default ->
-                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            case "/auth/login" -> handleLoginView(request, response);
+            case "/auth/register" -> handleRegisterView(request, response);
+            case "/auth/logout" -> handleLogout(request, response);
+            case "/dashboard" -> handleDashboard(request, response);
+            default -> response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         switch (request.getServletPath()) {
-            case "/auth/login" ->
-                handleLogin(request, response);
-            case "/auth/register" ->
-                handleRegister(request, response);
-            default ->
-                response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+            case "/auth/login" -> handleLogin(request, response);
+            case "/auth/register" -> handleRegister(request, response);
+            default -> response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
         }
     }
 
@@ -63,6 +56,7 @@ public class UserController extends HttpServlet {
         String password = defaultString(request.getParameter("password"));
 
         request.setAttribute("username", username);
+        request.setAttribute("email", email);
 
         if (!isValidUsername(username)) {
             forwardRegisterWithError("Username must be 3-30 characters and contain only letters, numbers, or underscore.", request, response);
@@ -95,7 +89,7 @@ public class UserController extends HttpServlet {
         try {
             createdUser = userDAO.createUser(userToCreate);
         } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
+            log("Failed to create user account", e);
             forwardRegisterWithError("Could not create account right now. Please try again.", request, response);
             return;
         }
@@ -105,7 +99,7 @@ public class UserController extends HttpServlet {
             return;
         }
 
-        createSession(request, createdUser.get());
+        issueAuthCookie(createdUser.get(), request, response);
         response.sendRedirect(request.getContextPath() + "/dashboard");
     }
 
@@ -124,7 +118,7 @@ public class UserController extends HttpServlet {
         try {
             user = userDAO.findByUsername(username);
         } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
+            log("Failed to authenticate user", e);
             forwardLoginWithError("Could not sign in right now. Please try again.", request, response);
             return;
         }
@@ -134,38 +128,58 @@ public class UserController extends HttpServlet {
             return;
         }
 
-        createSession(request, user.get());
+        issueAuthCookie(user.get(), request, response);
         response.sendRedirect(request.getContextPath() + "/dashboard");
     }
 
     private void handleLogout(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-            session.invalidate();
-        }
-
+        response.addCookie(jwtService.buildClearedAuthCookie(request));
         response.sendRedirect(request.getContextPath() + "/auth/login");
     }
 
     private void handleDashboard(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (!isAuthenticated(request)) {
+        Optional<DecodedJWT> jwt = resolveAuthenticatedUser(request);
+        if (jwt.isEmpty()) {
             response.sendRedirect(request.getContextPath() + "/auth/login");
             return;
         }
 
+        jwtService.applyClaimsToRequest(jwt.get(), request);
         forward(DASHBOARD_VIEW, request, response);
     }
 
-    private void createSession(HttpServletRequest request, UserModel user) {
-        HttpSession session = request.getSession(true);
-        session.setAttribute(AuthConstants.SESSION_USER_KEY, user.getUsername());
-        session.setAttribute(AuthConstants.SESSION_USER_ID_KEY, user.getUser_id());
-        session.setMaxInactiveInterval(30 * 60);
+    private void handleLoginView(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        if (isAuthenticated(request)) {
+            response.sendRedirect(request.getContextPath() + "/dashboard");
+            return;
+        }
+
+        forward(LOGIN_VIEW, request, response);
+    }
+
+    private void handleRegisterView(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        if (isAuthenticated(request)) {
+            response.sendRedirect(request.getContextPath() + "/dashboard");
+            return;
+        }
+
+        forward(REGISTER_VIEW, request, response);
     }
 
     private boolean isAuthenticated(HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
-        return session != null && session.getAttribute(AuthConstants.SESSION_USER_KEY) != null;
+        return resolveAuthenticatedUser(request).isPresent();
+    }
+
+    private Optional<DecodedJWT> resolveAuthenticatedUser(HttpServletRequest request) {
+        return jwtService.resolveToken(request).flatMap(jwtService::verify);
+    }
+
+    private void issueAuthCookie(UserModel user, HttpServletRequest request, HttpServletResponse response) {
+        String token = jwtService.generateToken(user);
+        response.addCookie(jwtService.buildAuthCookie(token, request));
+        response.setHeader("Cache-Control", "no-store");
     }
 
     private void forward(String view, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
