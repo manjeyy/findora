@@ -22,6 +22,7 @@ public class UserController extends HttpServlet {
     private static final String LOGIN_VIEW = "/pages/auth/login.jsp";
     private static final String REGISTER_VIEW = "/pages/auth/register.jsp";
     private static final String DASHBOARD_VIEW = "/pages/dashboard/user/home.jsp";
+    private static final String ADMIN_ROLE = "admin";
     private static final String DEFAULT_ROLE = "user";
     private static final int MIN_PASSWORD_LENGTH = 8;
     private static final Pattern USERNAME_PATTERN = Pattern.compile("^[A-Za-z0-9_]{3,30}$");
@@ -33,20 +34,28 @@ public class UserController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         switch (request.getServletPath()) {
-            case "/auth/login" -> handleLoginView(request, response);
-            case "/auth/register" -> handleRegisterView(request, response);
-            case "/auth/logout" -> handleLogout(request, response);
-            case "/dashboard" -> handleDashboard(request, response);
-            default -> response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            case "/auth/login" ->
+                handleLoginView(request, response);
+            case "/auth/register" ->
+                handleRegisterView(request, response);
+            case "/auth/logout" ->
+                handleLogout(request, response);
+            case "/dashboard" ->
+                handleDashboard(request, response);
+            default ->
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         switch (request.getServletPath()) {
-            case "/auth/login" -> handleLogin(request, response);
-            case "/auth/register" -> handleRegister(request, response);
-            default -> response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+            case "/auth/login" ->
+                handleLogin(request, response);
+            case "/auth/register" ->
+                handleRegister(request, response);
+            default ->
+                response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
         }
     }
 
@@ -128,6 +137,11 @@ public class UserController extends HttpServlet {
             return;
         }
 
+        if ("suspended".equalsIgnoreCase(user.get().getStatus())) {
+            forwardLoginWithError("Your account is suspended. Contact an admin.", request, response);
+            return;
+        }
+
         issueAuthCookie(user.get(), request, response);
         response.sendRedirect(request.getContextPath() + "/dashboard");
     }
@@ -145,6 +159,13 @@ public class UserController extends HttpServlet {
         }
 
         jwtService.applyClaimsToRequest(jwt.get(), request);
+
+        String role = jwt.get().getClaim("role").asString();
+        if (ADMIN_ROLE.equalsIgnoreCase(role)) {
+            response.sendRedirect(request.getContextPath() + "/admin/dashboard");
+            return;
+        }
+
         forward(DASHBOARD_VIEW, request, response);
     }
 

@@ -14,7 +14,7 @@ public class UserDAO {
     private static final String INSERT_USER_SQL
             = "INSERT INTO Users (username, email, password, role) VALUES (?, ?, ?, ?)";
     private static final String SELECT_USER_BY_USERNAME_SQL
-            = "SELECT user_id, username, email, password, role, created_at FROM Users WHERE username = ? LIMIT 1";
+            = "SELECT user_id, username, email, password, role, status, created_at FROM Users WHERE username = ? LIMIT 1";
     private static final String EXISTS_USERNAME_SQL
             = "SELECT 1 FROM Users WHERE username = ? LIMIT 1";
     private static final String EXISTS_EMAIL_SQL
@@ -107,6 +107,7 @@ public class UserDAO {
                 resultSet.getString("email"),
                 resultSet.getString("password"),
                 resultSet.getString("role"),
+                resultSet.getString("status"),
                 createdAtValue
         );
     }

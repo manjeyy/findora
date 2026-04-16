@@ -1,20 +1,27 @@
 package com.landf.features.user;
 
 public class UserModel {
+
     private int user_id;
     private String username;
     private String email;
     private String password;
     private String role;
+    private String status;
     private String created_at;
 
-    public UserModel(int user_id, String username, String email, String password, String role, String created_at) {
+    public UserModel(int user_id, String username, String email, String password, String role, String status, String created_at) {
         this.user_id = user_id;
         this.username = username;
         this.email = email;
         this.password = password;
         this.role = role;
+        this.status = status;
         this.created_at = created_at;
+    }
+
+    public UserModel(int user_id, String username, String email, String password, String role, String created_at) {
+        this(user_id, username, email, password, role, "active", created_at);
     }
 
     public UserModel(String username, String email, String password, String role) {
@@ -22,6 +29,7 @@ public class UserModel {
         this.email = email;
         this.password = password;
         this.role = role;
+        this.status = "active";
     }
 
     public int getUser_id() {
@@ -62,6 +70,14 @@ public class UserModel {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getCreated_at() {

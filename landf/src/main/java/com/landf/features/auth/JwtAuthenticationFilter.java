@@ -12,7 +12,7 @@ import jakarta.servlet.http.HttpFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebFilter(urlPatterns = {"/dashboard", "/pages/dashboard/*"})
+@WebFilter(urlPatterns = {"/dashboard", "/admin/*", "/pages/dashboard/*"})
 public class JwtAuthenticationFilter extends HttpFilter {
 
     private final JwtService jwtService = new JwtService();
