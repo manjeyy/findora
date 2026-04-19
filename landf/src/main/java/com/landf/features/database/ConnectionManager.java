@@ -1,4 +1,4 @@
-package com.landf.features.database;
+package main.java.com.landf.features.database;
 
 import java.sql.Connection;
 import java.sql.Driver;
@@ -7,8 +7,7 @@ import java.sql.SQLException;
 
 public class ConnectionManager {
 
-    private static final String URL =
-            "jdbc:mysql://localhost:3306/aplf";
+    private static final String URL = "jdbc:mysql://localhost:3306/aplf";
     private static final String USER = "root";
     private static final String PASS = "";
 
@@ -22,6 +21,10 @@ public class ConnectionManager {
     }
 
     public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(URL, USER, PASS);
+       try {
+           return DriverManager.getConnection(URL, USER, PASS);
+       } catch (SQLException e) {
+           return DriverManager.getConnection(URL, USER, "1234");
+       }
     }
 }
