@@ -150,28 +150,44 @@ public class ItemImpl {
     }
 
     public boolean updateItemById(Item item) throws SQLException {
-        try(Connection conn = ConnectionManager.getConnection();
-        PreparedStatement ps = conn.prepareStatement(ItemQuery.UPDATE_ITEM_BY_ID)){
-//            use optional
-            ps.setString(1, item.getType());
-            ps.setString(2, item.getTitle());
-            ps.setString(3, item.getDescription());
-            ps.setString(4, item.getCategory());
-            ps.setInt(5, item.getLocation_id());
-            ps.setDate(6, item.getEvent_date());
-            ps.setString(7, item.getImage_url());
-            ps.setInt(8, item.getUser_id());
-            ps.setString(9, item.getStatus());
-            ps.setString(10, item.getModeration_status());
-            ps.setObject(11, item.getMatched_item_id());
-            ps.setObject(12, item.getClaimed_by_claim_id());
+        Item existing = getItemByID(item.getItem_id());
 
-            ps.setInt(13,item.getItem_id());
-            int rows = ps.executeUpdate();
+        if (existing == null) {
+            throw new RuntimeException("Item not found");
+        }
 
-            return rows > 0;
+        if (item.getType() != null) existing.setType(item.getType());
+        if (item.getTitle() != null) existing.setTitle(item.getTitle());
+        if (item.getDescription() != null) existing.setDescription(item.getDescription());
+        if (item.getCategory() != null) existing.setCategory(item.getCategory());
+        if (item.getLocation_id() != 0) existing.setLocation_id(item.getLocation_id());
+        if (item.getEvent_date() != null) existing.setEvent_date(item.getEvent_date());
+        if (item.getImage_url() != null) existing.setImage_url(item.getImage_url());
+        if (item.getUser_id() != 0) existing.setUser_id(item.getUser_id());
+        if (item.getStatus() != null) existing.setStatus(item.getStatus());
+        if (item.getModeration_status() != null) existing.setModeration_status(item.getModeration_status());
+        if (item.getMatched_item_id() != null) existing.setMatched_item_id(item.getMatched_item_id());
+        if (item.getClaimed_by_claim_id() != null) existing.setClaimed_by_claim_id(item.getClaimed_by_claim_id());
+
+
+        try (Connection conn = ConnectionManager.getConnection();
+             PreparedStatement ps = conn.prepareStatement(ItemQuery.UPDATE_ITEM_BY_ID)) {
+
+            ps.setString(1, existing.getType());
+            ps.setString(2, existing.getTitle());
+            ps.setString(3, existing.getDescription());
+            ps.setString(4, existing.getCategory());
+            ps.setInt(5, existing.getLocation_id());
+            ps.setDate(6, existing.getEvent_date());
+            ps.setString(7, existing.getImage_url());
+            ps.setInt(8, existing.getUser_id());
+            ps.setString(9, existing.getStatus());
+            ps.setString(10, existing.getModeration_status());
+            ps.setObject(11, existing.getMatched_item_id());
+            ps.setObject(12, existing.getClaimed_by_claim_id());
+            ps.setInt(13, existing.getItem_id());
+
+            return ps.executeUpdate() > 0;
         }
     }
-
-
 }
