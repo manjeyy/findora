@@ -1,4 +1,4 @@
-package main.java.com.landf.features.items;
+package com.landf.features.items;
 
 
 import java.sql.*;

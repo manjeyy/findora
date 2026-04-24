@@ -1,4 +1,4 @@
-package main.java.com.landf.features.database;
+package com.landf.features.database;
 
 import java.sql.Connection;
 import java.sql.Driver;
