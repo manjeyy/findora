@@ -15,6 +15,8 @@ public class UserDAO {
             = "INSERT INTO Users (username, email, password, role) VALUES (?, ?, ?, ?)";
     private static final String SELECT_USER_BY_USERNAME_SQL
             = "SELECT user_id, username, email, password, role, status, created_at FROM Users WHERE username = ? LIMIT 1";
+    private static final String SELECT_USER_BY_EMAIL_SQL
+            = "SELECT user_id, username, email, password, role, status, created_at FROM Users WHERE email = ? LIMIT 1";
     private static final String EXISTS_USERNAME_SQL
             = "SELECT 1 FROM Users WHERE username = ? LIMIT 1";
     private static final String EXISTS_EMAIL_SQL
@@ -54,6 +56,23 @@ public class UserDAO {
         try (Connection connection = openConnection(); PreparedStatement statement = connection.prepareStatement(SELECT_USER_BY_USERNAME_SQL)) {
 
             statement.setString(1, username);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return Optional.of(mapRow(resultSet));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return Optional.empty();
+    }
+
+    public Optional<UserModel> findByEmail(String email) throws SQLException, ClassNotFoundException {
+        try (Connection connection = openConnection(); PreparedStatement statement = connection.prepareStatement(SELECT_USER_BY_EMAIL_SQL)) {
+
+            statement.setString(1, email);
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
@@ -110,5 +129,18 @@ public class UserDAO {
                 resultSet.getString("status"),
                 createdAtValue
         );
+    }
+
+    public boolean updatePasswordByUsername(String username, String newHashedPassword) {
+        final String sql = "UPDATE Users SET password = ? WHERE username = ?";
+        try (Connection connection = openConnection(); PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, newHashedPassword);
+            stmt.setString(2, username);
+            int updated = stmt.executeUpdate();
+            return updated > 0;
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

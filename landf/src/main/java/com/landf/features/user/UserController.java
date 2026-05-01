@@ -219,19 +219,19 @@ public class UserController extends HttpServlet {
         forward(LOGIN_VIEW, request, response);
     }
 
-    private String normalize(String value) {
+    public String normalize(String value) {
         return value == null ? "" : value.trim();
     }
 
-    private String defaultString(String value) {
+    public String defaultString(String value) {
         return value == null ? "" : value;
     }
 
-    private boolean isValidUsername(String username) {
+    public boolean isValidUsername(String username) {
         return USERNAME_PATTERN.matcher(username).matches();
     }
 
-    private boolean isValidEmail(String email) {
+    public boolean isValidEmail(String email) {
         return EMAIL_PATTERN.matcher(email).matches();
     }
 }
