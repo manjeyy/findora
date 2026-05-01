@@ -52,6 +52,25 @@ public class AdminDAO {
                 l.created_at DESC
             """;
 
+    private static final String LIST_PENDING_LOCATIONS_SQL = """
+            SELECT
+                l.location_id,
+                l.name,
+                l.latitude,
+                l.longitude,
+                l.status,
+                creator.username AS created_by,
+                reviewer.username AS reviewed_by,
+                l.review_notes,
+                l.created_at,
+                l.reviewed_at
+            FROM Locations l
+            JOIN Users creator ON creator.user_id = l.created_by
+            LEFT JOIN Users reviewer ON reviewer.user_id = l.reviewed_by
+            WHERE l.status = 'pending'
+            ORDER BY l.created_at DESC
+            """;
+
     private static final String REVIEW_LOCATION_SQL = """
             UPDATE Locations
             SET status = ?, reviewed_by = ?, review_notes = ?, reviewed_at = NOW()
@@ -284,6 +303,32 @@ public class AdminDAO {
         List<AdminLocationView> locations = new ArrayList<>();
 
         try (Connection connection = openConnection(); PreparedStatement statement = connection.prepareStatement(LIST_LOCATIONS_SQL); ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+                locations.add(new AdminLocationView(
+                        resultSet.getInt("location_id"),
+                        resultSet.getString("name"),
+                        resultSet.getDouble("latitude"),
+                        resultSet.getDouble("longitude"),
+                        resultSet.getString("status"),
+                        resultSet.getString("created_by"),
+                        resultSet.getString("reviewed_by"),
+                        resultSet.getString("review_notes"),
+                        toDateTimeString(resultSet.getTimestamp("created_at")),
+                        toDateTimeString(resultSet.getTimestamp("reviewed_at"))
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return locations;
+    }
+
+    public List<AdminLocationView> listPendingLocations() {
+        List<AdminLocationView> locations = new ArrayList<>();
+
+        try (Connection connection = openConnection(); PreparedStatement statement = connection.prepareStatement(LIST_PENDING_LOCATIONS_SQL); ResultSet resultSet = statement.executeQuery()) {
 
             while (resultSet.next()) {
                 locations.add(new AdminLocationView(
