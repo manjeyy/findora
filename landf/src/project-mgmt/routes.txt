@@ -15,22 +15,23 @@ PATCH  /users/:id
 DELETE /users/:id
 ROLE GUARD: admin only
 
-GET    /users/:id/items
-GET    /users/:id/claims
-GET    /users/:id/badges
-GET    /users/:id/reputation
-GET    /users/:id/missions
+GET    /users/:id/items (done)
+GET    /users/:id/claims (done)
+GET    /users/:id/badges (done)
+GET    /users/:id/reputation (done)
+GET    /users/:id/missions (done)
+GET    /users/:id/points (done)
 
 LOCATIONS
-GET    /locations
-GET    /locations/:id
-POST   /locations
-PATCH  /locations/:id
-DELETE /locations/:id
+GET    /locations (done)
+GET    /locations/:id (done)
+POST   /locations (done)
+PATCH  /locations/:id (done)
+DELETE /locations/:id (done)
 
-GET    /locations/pending
-POST   /locations/:id/approve
-POST   /locations/:id/reject
+GET    /locations/pending (done)
+POST   /locations/:id/approve (done)
+POST   /locations/:id/reject (done)
 
 ITEMS (CORE)
 GET    /items
