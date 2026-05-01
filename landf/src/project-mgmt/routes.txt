@@ -2,17 +2,18 @@ AUTH ROUTES
 POST   /auth/register (done) Manoj Gautam
 POST   /auth/login (done) Manoj Gautam
 POST   /auth/logout (done) Manoj Gautam
-POST   /auth/refresh
-GET    /auth/me
-POST   /auth/verify-email
-POST   /auth/forgot-password
-POST   /auth/reset-password
+POST   /auth/refresh (done) Subin + Manoj
+GET    /auth/me (done) Manoj
+POST   /auth/verify-email (done) Subin
+POST   /auth/forgot-password (done) Subin
+POST   /auth/reset-password (done) Subin
 
 USERS
 GET    /users
 GET    /users/:id
 PATCH  /users/:id
 DELETE /users/:id
+ROLE GUARD: admin only
 
 GET    /users/:id/items
 GET    /users/:id/claims

@@ -2,6 +2,7 @@ package com.landf.features.user;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
@@ -9,6 +10,7 @@ import org.mindrot.jbcrypt.BCrypt;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.landf.features.auth.JwtService;
+import com.landf.features.auth.guards.RoleGuard;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -16,7 +18,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet(urlPatterns = {"/auth/login", "/auth/register", "/auth/logout", "/dashboard"})
+@WebServlet(urlPatterns = {"/auth/login", "/auth/register", "/auth/logout", "/dashboard", "/users", "/users/*"})
 public class UserController extends HttpServlet {
 
     private static final String LOGIN_VIEW = "/pages/auth/login.jsp";
@@ -30,6 +32,17 @@ public class UserController extends HttpServlet {
 
     private final UserDAO userDAO = new UserDAO();
     private final JwtService jwtService = new JwtService();
+    private final RoleGuard roleGuard = new RoleGuard();
+
+    @Override
+    protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        if ("PATCH".equalsIgnoreCase(request.getMethod())) {
+            handlePatch(request, response);
+            return;
+        }
+
+        super.service(request, response);
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -42,6 +55,8 @@ public class UserController extends HttpServlet {
                 handleLogout(request, response);
             case "/dashboard" ->
                 handleDashboard(request, response);
+            case "/users" ->
+                handleUsersGet(request, response);
             default ->
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
@@ -57,6 +72,220 @@ public class UserController extends HttpServlet {
             default ->
                 response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
         }
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        if ("/users".equals(request.getServletPath())) {
+            handleUsersDelete(request, response);
+            return;
+        }
+
+        response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+    }
+
+    private void handlePatch(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        if ("/users".equals(request.getServletPath())) {
+            handleUsersPatch(request, response);
+            return;
+        }
+
+        response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+    }
+
+    private void handleUsersGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        if (!ensureAdminRole(request, response)) {
+            return;
+        }
+
+        String pathInfo = request.getPathInfo();
+        if (pathInfo == null || pathInfo.isBlank() || "/".equals(pathInfo)) {
+            List<UserModel> users = userDAO.listUsers();
+            writeJson(response, toJsonUsers(users));
+            return;
+        }
+
+        int userId = parsePathUserId(pathInfo);
+        if (userId <= 0) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid user id.");
+            return;
+        }
+
+        Optional<UserModel> user = findUserById(userId);
+        if (user.isEmpty()) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+
+        writeJson(response, toJsonUser(user.get()));
+    }
+
+    private void handleUsersPatch(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        if (!ensureAdminRole(request, response)) {
+            return;
+        }
+
+        int userId = resolveTargetUserId(request);
+        if (userId <= 0) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid user id.");
+            return;
+        }
+
+        Optional<UserModel> existing = findUserById(userId);
+        if (existing.isEmpty()) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+
+        UserModel updatedUser = mergeUser(existing.get(), request);
+        if (updatedUser == null) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "No valid fields supplied.");
+            return;
+        }
+
+        if (!userDAO.updateUser(updatedUser)) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to update user.");
+            return;
+        }
+
+        writeJson(response, toJsonUser(updatedUser));
+    }
+
+    private void handleUsersDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        if (!ensureAdminRole(request, response)) {
+            return;
+        }
+
+        int userId = resolveTargetUserId(request);
+        if (userId <= 0) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid user id.");
+            return;
+        }
+
+        Object currentUserId = request.getAttribute("authUserId");
+        if (currentUserId instanceof Number number && number.intValue() == userId) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "You cannot delete your own account.");
+            return;
+        }
+
+        if (!userDAO.deleteUser(userId)) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+
+        response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+    }
+
+    private boolean ensureAdminRole(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        return roleGuard.hasRole(ADMIN_ROLE, request, response);
+    }
+
+    private Optional<UserModel> findUserById(int userId) {
+        try {
+            return userDAO.findById(userId);
+        } catch (SQLException | ClassNotFoundException e) {
+            log("Failed to load user " + userId, e);
+            return Optional.empty();
+        }
+    }
+
+    private UserModel mergeUser(UserModel currentUser, HttpServletRequest request) {
+        String username = normalize(request.getParameter("username"));
+        String email = normalize(request.getParameter("email"));
+        String role = normalize(request.getParameter("role"));
+        String status = normalize(request.getParameter("status"));
+
+        boolean changed = false;
+
+        if (!username.isBlank()) {
+            if (!isValidUsername(username)) {
+                return null;
+            }
+            currentUser.setUsername(username);
+            changed = true;
+        }
+
+        if (!email.isBlank()) {
+            if (!isValidEmail(email)) {
+                return null;
+            }
+            currentUser.setEmail(email);
+            changed = true;
+        }
+
+        if (!role.isBlank()) {
+            currentUser.setRole(role);
+            changed = true;
+        }
+
+        if (!status.isBlank()) {
+            currentUser.setStatus(status);
+            changed = true;
+        }
+
+        return changed ? currentUser : null;
+    }
+
+    private int resolveTargetUserId(HttpServletRequest request) {
+        String pathInfo = request.getPathInfo();
+        return parsePathUserId(pathInfo);
+    }
+
+    private int parsePathUserId(String pathInfo) {
+        if (pathInfo == null || pathInfo.isBlank()) {
+            return -1;
+        }
+
+        String trimmed = pathInfo.startsWith("/") ? pathInfo.substring(1) : pathInfo;
+        int slashIndex = trimmed.indexOf('/');
+        String idPart = slashIndex >= 0 ? trimmed.substring(0, slashIndex) : trimmed;
+
+        try {
+            int parsed = Integer.parseInt(idPart.trim());
+            return parsed > 0 ? parsed : -1;
+        } catch (NumberFormatException ex) {
+            return -1;
+        }
+    }
+
+    private String toJsonUsers(List<UserModel> users) {
+        StringBuilder json = new StringBuilder("[");
+        for (int i = 0; i < users.size(); i++) {
+            if (i > 0) {
+                json.append(',');
+            }
+            json.append(toJsonUser(users.get(i)));
+        }
+        json.append(']');
+        return json.toString();
+    }
+
+    private String toJsonUser(UserModel user) {
+        return String.format(
+                "{\"user_id\":%d,\"username\":\"%s\",\"email\":\"%s\",\"role\":\"%s\",\"status\":\"%s\",\"created_at\":%s}",
+                user.getUser_id(),
+                escape(user.getUsername()),
+                escape(user.getEmail()),
+                escape(user.getRole()),
+                escape(user.getStatus()),
+                user.getCreated_at() == null ? "null" : "\"" + escape(user.getCreated_at()) + "\"");
+    }
+
+    private void writeJson(HttpServletResponse response, String json) throws IOException {
+        response.setContentType("application/json;charset=UTF-8");
+        response.getWriter().write(json);
+    }
+
+    private String escape(String value) {
+        if (value == null) {
+            return "";
+        }
+
+        return value
+                .replace("\\", "\\\\")
+                .replace("\"", "\\\"")
+                .replace("\n", "\\n")
+                .replace("\r", "\\r");
     }
 
     private void handleRegister(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
