@@ -1,0 +1,115 @@
+AUTH ROUTES
+POST   /auth/register (done) Manoj Gautam
+POST   /auth/login (done) Manoj Gautam
+POST   /auth/logout (done) Manoj Gautam
+POST   /auth/refresh
+GET    /auth/me
+POST   /auth/verify-email
+POST   /auth/forgot-password
+POST   /auth/reset-password
+
+USERS
+GET    /users
+GET    /users/:id
+PATCH  /users/:id
+DELETE /users/:id
+
+GET    /users/:id/items
+GET    /users/:id/claims
+GET    /users/:id/badges
+GET    /users/:id/reputation
+GET    /users/:id/missions
+
+LOCATIONS
+GET    /locations
+GET    /locations/:id
+POST   /locations
+PATCH  /locations/:id
+DELETE /locations/:id
+
+GET    /locations/pending
+POST   /locations/:id/approve
+POST   /locations/:id/reject
+
+ITEMS (CORE)
+GET    /items
+GET    /items/:id
+POST   /items
+PATCH  /items/:id
+DELETE /items/:id
+GET    /items?type=lost
+GET    /items?type=found
+GET    /items?status=open
+GET    /items?category=electronics
+GET    /items?location_id=1
+GET    /users/:id/items
+
+MATCHING SYSTEM
+POST   /items/:id/match/:otherItemId
+DELETE /items/:id/unmatch
+GET    /items/:id/matches
+GET    /items/:id/suggestions
+POST   /items/:id/auto-match
+
+
+CLAIMS
+POST   /items/:id/claims
+GET    /claims/:id
+GET    /items/:id/claims
+GET    /users/:id/claims
+POST   /claims/:id/approve
+POST   /claims/:id/reject
+
+REPORTS (MODERATION)
+POST   /reports
+GET    /reports
+GET    /reports/:id
+POST   /reports/:id/resolve
+POST   /reports/:id/reject
+
+
+
+POINTS
+GET    /users/:id/points
+
+BADGES
+GET    /badges
+GET    /users/:id/badges
+POST   /users/:id/badges   // system/admin only
+
+
+
+REPUTATION
+GET    /users/:id/reputation
+
+MISSIONS
+GET    /missions
+GET    /users/:id/missions
+POST   /users/:id/missions/:missionId/start
+POST   /users/:id/missions/:missionId/update
+POST   /users/:id/missions/:missionId/complete
+
+
+LEADERBOARDS
+GET    /leaderboards
+GET    /leaderboards?location_id=1
+GET    /leaderboards?metric=recoveries
+GET    /leaderboards?metric=reputation
+
+SEARCH & UTILITIES
+GET    /search?q=keyword
+GET    /dashboard/stats
+GET    /items/nearby?lat=xx&lng=xx&radius=5km
+
+ADMIN ROUTES
+GET    /admin/users
+PATCH  /admin/users/:id/suspend
+PATCH  /admin/users/:id/activate
+
+GET    /admin/items
+PATCH  /admin/items/:id/flag
+DELETE /admin/items/:id
+
+GET    /admin/reports
+GET    /admin/claims
+GET    /admin/locations/pending
