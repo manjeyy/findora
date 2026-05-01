@@ -34,16 +34,16 @@ POST   /locations/:id/approve (done)
 POST   /locations/:id/reject (done)
 
 ITEMS (CORE)
-GET    /items
-GET    /items/:id
-POST   /items
-PATCH  /items/:id
-DELETE /items/:id
-GET    /items?type=lost
-GET    /items?type=found
-GET    /items?status=open
-GET    /items?category=electronics
-GET    /items?location_id=1
+GET    /items (done)
+GET    /items/:id (done)
+POST   /items (done)
+PATCH  /items/:id (done)
+DELETE /items/:id (done)
+GET    /items?type=lost (done)
+GET    /items?type=found (done)
+GET    /items?status=open (done)
+GET    /items?category=electronics (done)
+GET    /items?location_id=1 (done)
 GET    /users/:id/items
 
 MATCHING SYSTEM
