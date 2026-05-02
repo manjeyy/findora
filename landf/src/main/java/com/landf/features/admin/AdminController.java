@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.List;
 
 import com.landf.features.auth.AuthConstants;
+import com.landf.features.location.LocationDAO;
+import com.landf.features.location.LocationModel;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -15,10 +17,14 @@ import jakarta.servlet.http.HttpSession;
 @WebServlet(urlPatterns = {
     "/admin/dashboard",
     "/admin/locations",
+    "/admin/locations/pending",
+    "/admin/locations/new",
+    "/admin/locations/create",
     "/admin/locations/review",
     "/admin/claims",
     "/admin/claims/review",
     "/admin/items",
+    "/admin/items/ledger",
     "/admin/items/moderate",
     "/admin/users",
     "/admin/users/update",
@@ -31,8 +37,10 @@ public class AdminController extends HttpServlet {
 
     private static final String ADMIN_DASHBOARD_VIEW = "/pages/dashboard/admin/home.jsp";
     private static final String ADMIN_LOCATIONS_VIEW = "/pages/dashboard/admin/locations.jsp";
+    private static final String ADMIN_LOCATION_CREATE_VIEW = "/pages/dashboard/admin/location-create.jsp";
     private static final String ADMIN_CLAIMS_VIEW = "/pages/dashboard/admin/claims.jsp";
     private static final String ADMIN_ITEMS_VIEW = "/pages/dashboard/admin/items.jsp";
+    private static final String ADMIN_ITEM_LEDGER_VIEW = "/pages/dashboard/admin/item-ledger.jsp";
     private static final String ADMIN_USERS_VIEW = "/pages/dashboard/admin/users.jsp";
     private static final String ADMIN_REPORTS_VIEW = "/pages/dashboard/admin/reports.jsp";
 
@@ -40,6 +48,7 @@ public class AdminController extends HttpServlet {
     private static final String FLASH_ERROR_KEY = "flashError";
 
     private final AdminDAO adminDAO = new AdminDAO();
+    private final LocationDAO locationDAO = new LocationDAO();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -55,10 +64,16 @@ public class AdminController extends HttpServlet {
                 showDashboard(request, response);
             case "/admin/locations" ->
                 showLocations(request, response);
+            case "/admin/locations/pending" ->
+                showPendingLocations(request, response);
+            case "/admin/locations/new" ->
+                showLocationCreateForm(request, response);
             case "/admin/claims" ->
                 showClaims(request, response);
             case "/admin/items" ->
                 showItems(request, response);
+            case "/admin/items/ledger" ->
+                showItemLedger(request, response);
             case "/admin/users" ->
                 showUsers(request, response);
             case "/admin/reports" ->
@@ -75,6 +90,8 @@ public class AdminController extends HttpServlet {
         }
 
         switch (request.getServletPath()) {
+            case "/admin/locations/create" ->
+                createLocation(request, response);
             case "/admin/locations/review" ->
                 reviewLocation(request, response);
             case "/admin/claims/review" ->
@@ -101,7 +118,21 @@ public class AdminController extends HttpServlet {
         List<AdminLocationView> locations = adminDAO.listLocations();
         request.setAttribute("locations", locations);
         request.setAttribute("activeSection", "locations");
+        request.setAttribute("locationScope", "all");
         forward(ADMIN_LOCATIONS_VIEW, request, response);
+    }
+
+    private void showPendingLocations(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        List<AdminLocationView> locations = adminDAO.listPendingLocations();
+        request.setAttribute("locations", locations);
+        request.setAttribute("activeSection", "locations");
+        request.setAttribute("locationScope", "pending");
+        forward(ADMIN_LOCATIONS_VIEW, request, response);
+    }
+
+    private void showLocationCreateForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setAttribute("activeSection", "locations");
+        forward(ADMIN_LOCATION_CREATE_VIEW, request, response);
     }
 
     private void showClaims(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -116,6 +147,13 @@ public class AdminController extends HttpServlet {
         request.setAttribute("items", items);
         request.setAttribute("activeSection", "items");
         forward(ADMIN_ITEMS_VIEW, request, response);
+    }
+
+    private void showItemLedger(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setAttribute("items", adminDAO.listItems());
+        request.setAttribute("stats", adminDAO.loadDashboardStats());
+        request.setAttribute("activeSection", "items");
+        forward(ADMIN_ITEM_LEDGER_VIEW, request, response);
     }
 
     private void showUsers(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -244,6 +282,38 @@ public class AdminController extends HttpServlet {
         }
 
         redirect(response, request, "/admin/reports");
+    }
+
+    private void createLocation(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        int adminUserId = resolveAdminUserId(request);
+        String name = normalize(request.getParameter("name"));
+        String latitudeValue = normalize(request.getParameter("latitude"));
+        String longitudeValue = normalize(request.getParameter("longitude"));
+
+        if (adminUserId <= 0 || name.isBlank() || latitudeValue.isBlank() || longitudeValue.isBlank()) {
+            setFlashError(request, "Location name, latitude, and longitude are required.");
+            redirect(response, request, "/admin/locations/new");
+            return;
+        }
+
+        double latitude;
+        double longitude;
+        try {
+            latitude = Double.parseDouble(latitudeValue);
+            longitude = Double.parseDouble(longitudeValue);
+        } catch (NumberFormatException ex) {
+            setFlashError(request, "Latitude and longitude must be numeric.");
+            redirect(response, request, "/admin/locations/new");
+            return;
+        }
+
+        if (locationDAO.createLocation(new LocationModel(name, latitude, longitude, adminUserId)).isPresent()) {
+            setFlashSuccess(request, "Location submitted for review.");
+            redirect(response, request, "/admin/locations/pending");
+        } else {
+            setFlashError(request, "Failed to create location.");
+            redirect(response, request, "/admin/locations/new");
+        }
     }
 
     private boolean ensureAdmin(HttpServletRequest request, HttpServletResponse response) throws IOException {

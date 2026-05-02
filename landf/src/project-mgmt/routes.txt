@@ -2,46 +2,48 @@ AUTH ROUTES
 POST   /auth/register (done) Manoj Gautam
 POST   /auth/login (done) Manoj Gautam
 POST   /auth/logout (done) Manoj Gautam
-POST   /auth/refresh
-GET    /auth/me
-POST   /auth/verify-email
-POST   /auth/forgot-password
-POST   /auth/reset-password
+POST   /auth/refresh (done) Subin + Manoj
+GET    /auth/me (done) Manoj
+POST   /auth/verify-email (done) Subin
+POST   /auth/forgot-password (done) Subin
+POST   /auth/reset-password (done) Subin
 
 USERS
 GET    /users
 GET    /users/:id
 PATCH  /users/:id
 DELETE /users/:id
+ROLE GUARD: admin only
 
-GET    /users/:id/items
-GET    /users/:id/claims
-GET    /users/:id/badges
-GET    /users/:id/reputation
-GET    /users/:id/missions
+GET    /users/:id/items (done)
+GET    /users/:id/claims (done)
+GET    /users/:id/badges (done)
+GET    /users/:id/reputation (done)
+GET    /users/:id/missions (done)
+GET    /users/:id/points (done)
 
 LOCATIONS
-GET    /locations
-GET    /locations/:id
-POST   /locations
-PATCH  /locations/:id
-DELETE /locations/:id
+GET    /locations (done)
+GET    /locations/:id (done)
+POST   /locations (done)
+PATCH  /locations/:id (done)
+DELETE /locations/:id (done)
 
-GET    /locations/pending
-POST   /locations/:id/approve
-POST   /locations/:id/reject
+GET    /locations/pending (done)
+POST   /locations/:id/approve (done)
+POST   /locations/:id/reject (done)
 
 ITEMS (CORE)
-GET    /items
-GET    /items/:id
-POST   /items
-PATCH  /items/:id
-DELETE /items/:id
-GET    /items?type=lost
-GET    /items?type=found
-GET    /items?status=open
-GET    /items?category=electronics
-GET    /items?location_id=1
+GET    /items (done)
+GET    /items/:id (done)
+POST   /items (done)
+PATCH  /items/:id (done)
+DELETE /items/:id (done)
+GET    /items?type=lost (done)
+GET    /items?type=found (done)
+GET    /items?status=open (done)
+GET    /items?category=electronics (done)
+GET    /items?location_id=1 (done)
 GET    /users/:id/items
 
 MATCHING SYSTEM
