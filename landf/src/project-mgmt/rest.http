@@ -1,0 +1,4 @@
+
+
+POST http://localhost:8080/landf_war_exploded/auth/reset-password?token=7a95ff66-e5f8-4713-8b61-9097224c4eb1&password=12345678
+Content-Type: application/json

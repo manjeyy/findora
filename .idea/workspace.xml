@@ -19,6 +19,7 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -29,7 +30,7 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/manjeyy/apcd.git&quot;,
-    &quot;accountId&quot;: &quot;379b60de-4209-4bb7-96f0-ce8b6ecdd5d2&quot;
+    &quot;accountId&quot;: &quot;2660beec-1ddc-4169-b979-cd3a61c68ee7&quot;
   }
 }</component>
   <component name="MavenImportPreferences">
@@ -38,6 +39,10 @@
         <option name="mavenHomeTypeForPersistence" value="WRAPPER" />
       </MavenGeneralSettings>
     </option>
+  </component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
   </component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
@@ -57,14 +62,25 @@
   &quot;keyToString&quot;: {
     &quot;Database Script.Schema.sql.executor&quot;: &quot;Run&quot;,
     &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
     &quot;Tomcat Server.Tomcat 11.0.18.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;subin&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/DELL/IdeaProjects/Coursework/apcd&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/2nd Year/chauchau&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
   &quot;keyToStringList&quot;: {
@@ -76,20 +92,7 @@
     ]
   }
 }</component>
-  <component name="RunDashboard">
-    <option name="configurationStatuses">
-      <map>
-        <entry key="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory">
-          <value>
-            <map>
-              <entry key="Tomcat 11.0.18" value="FAILED" />
-            </map>
-          </value>
-        </entry>
-      </map>
-    </option>
-  </component>
-  <component name="RunManager" selected="Database Script.Schema.sql">
+  <component name="RunManager" selected="Tomcat Server.Tomcat 11.0.18">
     <configuration name="Schema.sql" type="DatabaseScript" editBeforeRun="true" nameIsGenerated="true">
       <script-file value="$PROJECT_DIR$/landf/src/main/java/com/landf/features/database/Schema.sql" />
       <script-mode>FILE</script-mode>
@@ -199,6 +202,7 @@
       <workItem from="1777170184757" duration="2201000" />
       <workItem from="1777609263688" duration="641000" />
       <workItem from="1777708066578" duration="1297000" />
+      <workItem from="1777775040947" duration="1047000" />
     </task>
     <task id="LOCAL-00001" summary="Configuring update">
       <option name="closed" value="true" />
