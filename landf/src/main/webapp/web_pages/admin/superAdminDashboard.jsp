@@ -74,9 +74,10 @@
     } </style>
 </head>
 <body class="flex min-h-screen text-on-surface">
-<jsp:include page="/components/sidebar.jsp"/>
-<main class="flex-1 md:ml-64 flex flex-col min-h-screen">
-    <jsp:include page="/components/admin/header.jsp"/> <!-- Dashboard Canvas -->
+    <% request.setAttribute("sectionLabel", "System Overview"); %>
+    <% request.setAttribute("pageTitle", "System Overview"); %>
+    <jsp:include page="/components/admin/layout_start.jsp" />
+    <!-- Dashboard Canvas -->
     <div class="p-6 lg:p-10 space-y-8"> <!-- Hero Header Section (Asymmetric) -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
             <div class="lg:col-span-8"><h2
