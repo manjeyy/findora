@@ -159,6 +159,7 @@ public class AdminController extends HttpServlet {
     private void showUsers(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<AdminUserView> users = adminDAO.listUsers();
         request.setAttribute("users", users);
+        request.setAttribute("locations", locationDAO.listLocations());
         request.setAttribute("activeSection", "users");
         forward(ADMIN_USERS_VIEW, request, response);
     }
@@ -238,12 +239,27 @@ public class AdminController extends HttpServlet {
         int userId = parsePositiveInt(request.getParameter("userId"));
         int adminUserId = resolveAdminUserId(request);
         String role = normalize(request.getParameter("role"));
+        String locationIdValue = normalize(request.getParameter("locationId"));
         String status = normalize(request.getParameter("status"));
+        Integer locationId = null;
 
         if (userId <= 0) {
             setFlashError(request, "Invalid user update request.");
             redirect(response, request, "/admin/users");
             return;
+        }
+
+        if (!locationIdValue.isBlank()) {
+            try {
+                int parsedLocationId = Integer.parseInt(locationIdValue);
+                if (parsedLocationId > 0) {
+                    locationId = parsedLocationId;
+                }
+            } catch (NumberFormatException ex) {
+                setFlashError(request, "Invalid location assignment.");
+                redirect(response, request, "/admin/users");
+                return;
+            }
         }
 
         if (userId == adminUserId && "suspended".equalsIgnoreCase(status)) {
@@ -252,7 +268,7 @@ public class AdminController extends HttpServlet {
             return;
         }
 
-        boolean updated = adminDAO.updateUser(userId, role, status);
+        boolean updated = adminDAO.updateUser(userId, role, locationId, status);
         if (updated) {
             setFlashSuccess(request, "User account updated.");
         } else {
