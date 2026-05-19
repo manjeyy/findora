@@ -1,21 +1,24 @@
-<!DOCTYPE html>
-<% request.setAttribute("activeSection", "claims");
+<%@ page import="java.util.List" %>
+<%@ page import="com.landf.features.admin.AdminClaimView" %>
+<%
+    request.setAttribute("activeSection", "claims");
     request.setAttribute("sectionLabel", "Claims Console");
     request.setAttribute("pageTitle", "Claims Stewardship");
     request.setAttribute("searchPlaceholder", "Search claims, users, or items...");
     request.setAttribute("pageActionsHtml", "<div class=\"flex gap-2 bg-surface-container-low p-1 rounded-lg\">" + "<button class=\"px-4 py-2 bg-surface-container-lowest text-primary font-semibold rounded-md shadow-sm text-sm\">All Requests</button>" + "<button class=\"px-4 py-2 text-on-surface-variant font-medium rounded-md text-sm hover:bg-white/50 transition-colors\">Pending Review</button>" + "<button class=\"px-4 py-2 text-on-surface-variant font-medium rounded-md text-sm hover:bg-white/50 transition-colors\">Resolved</button>" + "</div>");
+    List<AdminClaimView> claims = (List<AdminClaimView>) request.getAttribute("claims");
+    if (claims == null) {
+        claims = List.of();
+    }
 %>
+<!DOCTYPE html>
 <html class="light" lang="en">
-<head> <jsp:include page="/components/head.jsp"| /> <title>Claims Management | Findora Admin</title>
-    <script id="tailwind-config"> tailwind.config = {darkMode: "class", theme: {extend: {colors: {
-    <%@ page import="java.util.List" %> <%@ page import="com.landf.features.admin.AdminClaimView" %> <% request.setAttribute("activeSection", "claims"); request.setAttribute("sectionLabel", "Claim Review"); request.setAttribute("searchPlaceholder", "Search claims, users, or items..."); List<AdminClaimView> claims = (List<AdminClaimView>) request.getAttribute("claims"); if (claims == null) { claims = List.of(); } %>
-    <html class="light" lang="en">
-    <head> <jsp:include page="/components/head.jsp" /> <title>Claims Management | Findora</title>
-        <style> body {font - family: 'Inter', sans-serif; background: #f7fafa;} h1, h2,
-            h3 {font - family: 'Manrope', sans-serif;} </style>
-    </head>
-    <body class="text-slate-900"> <jsp:include page="/components/location-admin/sidebar.jsp" />
-    <main class="ml-64 min-h-screen"> <jsp:include page="/components/location-admin/header.jsp" />
+<head>
+    <jsp:include page="/components/head.jsp" />
+    <title>Claims Management | Findora</title>
+</head>
+<body class="text-slate-900">
+    <jsp:include page="/components/location-admin/layout_start.jsp" />
         <section class="p-8 space-y-6">
             <div class="flex items-end justify-between gap-4">
                 <div><h1 class="text-3xl font-black tracking-tight">Claims Stewardship</h1> <p
@@ -67,6 +70,6 @@
                 </div>
             </div>
         </section>
-    </main>
+    <jsp:include page="/components/location-admin/layout_end.jsp" />
     </body>
     </html>

@@ -10,56 +10,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c70ad2b6-e6cb-40b0-a77c-81a5cae1c697" name="Changes" comment="Configuring import error">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/landf/src/main/java/com/landf/features/admin/AdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/landf/src/main/java/com/landf/features/admin/AdminController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/landf/src/main/java/com/landf/features/admin/AdminDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/landf/src/main/java/com/landf/features/admin/AdminDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/landf/src/main/java/com/landf/features/admin/AdminUserView.java" beforeDir="false" afterPath="$PROJECT_DIR$/landf/src/main/java/com/landf/features/admin/AdminUserView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/landf/src/main/java/com/landf/features/auth/AuthConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/landf/src/main/java/com/landf/features/auth/AuthConstants.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/landf/src/main/java/com/landf/features/auth/JwtAuthenticationFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/landf/src/main/java/com/landf/features/auth/JwtAuthenticationFilter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/landf/src/main/java/com/landf/features/auth/JwtService.java" beforeDir="false" afterPath="$PROJECT_DIR$/landf/src/main/java/com/landf/features/auth/JwtService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/landf/src/main/java/com/landf/features/database/Schema.sql" beforeDir="false" afterPath="$PROJECT_DIR$/landf/src/main/java/com/landf/features/database/Schema.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/landf/src/main/java/com/landf/features/items/ItemController.java" beforeDir="false" afterPath="$PROJECT_DIR$/landf/src/main/java/com/landf/features/items/ItemController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/landf/src/main/java/com/landf/features/user/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/landf/src/main/java/com/landf/features/user/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/landf/src/main/java/com/landf/features/user/UserDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/landf/src/main/java/com/landf/features/user/UserDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/landf/src/main/java/com/landf/features/user/UserModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/landf/src/main/java/com/landf/features/user/UserModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/landf/src/main/webapp/components/admin/header.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/landf/src/main/webapp/components/admin/header.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/landf/src/main/webapp/components/admin/sidebar.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/landf/src/main/webapp/components/admin/sidebar.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/landf/src/main/webapp/components/footer.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/landf/src/main/webapp/components/footer.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/landf/src/main/webapp/components/location-admin/sidebar.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/landf/src/main/webapp/components/location-admin/sidebar.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/landf/src/main/webapp/pages/auth/login.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/landf/src/main/webapp/pages/auth/login.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/landf/src/main/webapp/pages/auth/register.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/landf/src/main/webapp/pages/auth/register.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/landf/src/main/webapp/pages/dashboard/admin/claims.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/landf/src/main/webapp/pages/dashboard/admin/claims.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/landf/src/main/webapp/pages/dashboard/admin/home.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/landf/src/main/webapp/pages/dashboard/admin/home.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/landf/src/main/webapp/pages/dashboard/admin/item-ledger.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/landf/src/main/webapp/pages/dashboard/admin/item-ledger.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/landf/src/main/webapp/pages/dashboard/admin/items.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/landf/src/main/webapp/pages/dashboard/admin/items.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/landf/src/main/webapp/pages/dashboard/admin/location-create.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/landf/src/main/webapp/pages/dashboard/admin/location-create.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/landf/src/main/webapp/pages/dashboard/admin/locations.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/landf/src/main/webapp/pages/dashboard/admin/locations.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/landf/src/main/webapp/pages/dashboard/admin/reports.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/landf/src/main/webapp/pages/dashboard/admin/reports.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/landf/src/main/webapp/pages/dashboard/admin/users.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/landf/src/main/webapp/pages/dashboard/admin/users.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/landf/src/main/webapp/pages/dashboard/user/home.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/landf/src/main/webapp/pages/dashboard/user/home.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/landf/src/main/webapp/pages/test.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/landf/src/main/webapp/pages/test.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/landf/src/main/webapp/web_pages/addLocation.jsp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/landf/src/main/webapp/web_pages/claimItemPage.jsp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/landf/src/main/webapp/web_pages/claimVerificationLedger.jsp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/landf/src/main/webapp/web_pages/claimVerificationPanel.jsp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/landf/src/main/webapp/web_pages/createAccountPage.jsp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/landf/src/main/webapp/web_pages/gamificationDashboard.jsp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/landf/src/main/webapp/web_pages/globalLocationManagement.jsp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/landf/src/main/webapp/web_pages/globalitemmanagement.jsp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/landf/src/main/webapp/web_pages/home.jsp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/landf/src/main/webapp/web_pages/homeDashboard.jsp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/landf/src/main/webapp/web_pages/itemDetailPage.jsp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/landf/src/main/webapp/web_pages/itemListingPage.jsp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/landf/src/main/webapp/web_pages/locationAdminDashboard.jsp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/landf/src/main/webapp/web_pages/locationItemLedger.jsp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/landf/src/main/webapp/web_pages/loginPage.jsp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/landf/src/main/webapp/web_pages/manageUsers.jsp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/landf/src/main/webapp/web_pages/reportFoundItem.jsp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/landf/src/main/webapp/web_pages/reportLostItem.jsp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/landf/src/main/webapp/web_pages/superAdminDashboard.jsp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/landf/src/main/webapp/web_pages/systemReportPage.jsp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/landf/src/main/webapp/web_pages/userHomeDashboard.jsp" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,6 +22,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Class" />
+        <option value="Jsp File" />
       </list>
     </option>
   </component>
@@ -160,6 +113,12 @@
     ]
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\apcd\landf\src\project-mgmt\db" />
+      <recent name="D:\apcd\landf\src\project-mgmt" />
+    </key>
+  </component>
   <component name="RunDashboard">
     <option name="configurationStatuses">
       <map>
@@ -300,7 +259,8 @@
       <workItem from="1777778441093" duration="1208000" />
       <workItem from="1777783785928" duration="341000" />
       <workItem from="1777785517376" duration="2036000" />
-      <workItem from="1777800263592" duration="4045000" />
+      <workItem from="1777800263592" duration="19803000" />
+      <workItem from="1778583490644" duration="112000" />
     </task>
     <task id="LOCAL-00001" summary="Configuring update">
       <option name="closed" value="true" />
@@ -318,7 +278,23 @@
       <option name="project" value="LOCAL" />
       <updated>1777016673986</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Configuring import error">
+      <option name="closed" value="true" />
+      <created>1777804525131</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1777804525131</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Configuring import error">
+      <option name="closed" value="true" />
+      <created>1777804548747</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1777804548747</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

@@ -1,3 +1,4 @@
+
 CREATE TABLE IF NOT EXISTS Users
 (
     user_id     INT PRIMARY KEY AUTO_INCREMENT,
@@ -5,13 +6,11 @@ CREATE TABLE IF NOT EXISTS Users
     email       VARCHAR(100)                             NOT NULL UNIQUE,
     password    VARCHAR(255)                             NOT NULL,
     role        ENUM ('admin', 'location_admin', 'user') NOT NULL DEFAULT 'user',
-    location_id INT                                      NULL,
+    location_id INT NULL,
     status      ENUM ('active', 'suspended')             NOT NULL DEFAULT 'active',
-    created_at  TIMESTAMP                                         DEFAULT CURRENT_TIMESTAMP,
-    updated_at  TIMESTAMP                                         DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    CONSTRAINT fk_users_location FOREIGN KEY (location_id) REFERENCES Locations (location_id)
+    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
-
 
 CREATE TABLE IF NOT EXISTS Locations
 (
@@ -23,11 +22,16 @@ CREATE TABLE IF NOT EXISTS Locations
     created_by   INT                                      NOT NULL,
     reviewed_by  INT,
     review_notes VARCHAR(255),
-    created_at   TIMESTAMP                                         DEFAULT CURRENT_TIMESTAMP,
-    reviewed_at  TIMESTAMP                                NULL,
+    created_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    reviewed_at  TIMESTAMP NULL,
     CONSTRAINT fk_locations_creator FOREIGN KEY (created_by) REFERENCES Users (user_id),
     CONSTRAINT fk_locations_reviewer FOREIGN KEY (reviewed_by) REFERENCES Users (user_id)
 );
+
+
+ALTER TABLE Users
+    ADD CONSTRAINT fk_users_location
+        FOREIGN KEY (location_id) REFERENCES Locations (location_id);
 
 CREATE TABLE IF NOT EXISTS Items
 (

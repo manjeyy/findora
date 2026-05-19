@@ -44,15 +44,15 @@
         <form class="space-y-5" method="post" action="<%= request.getContextPath() %>/auth/register">
             <div><label for="username" class="mb-1 block text-sm font-semibold text-slate-700">Username</label> <input
                     id="username" name="username" type="text" value="<%= escapeHtml(username) %>"
-                    autocomplete="username" required
+                    autocomplete="username"
                     class="w-full rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm outline-none ring-sky-500 transition focus:ring-2">
             </div>
             <div><label for="username" class="mb-1 block text-sm font-semibold text-slate-700">Email</label> <input
-                    id="email" name="email" type="email" value="<%= escapeHtml(email) %>" autocomplete="email" required
+                    id="email" name="email"  value="<%= escapeHtml(email) %>"
                     class="w-full rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm outline-none ring-sky-500 transition focus:ring-2">
             </div>
             <div><label for="password" class="mb-1 block text-sm font-semibold text-slate-700">Password</label> <input
-                    id="password" name="password" type="password" autocomplete="new-password" required
+                    id="password" name="password"
                     class="w-full rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm outline-none ring-sky-500 transition focus:ring-2">
             </div>
             <button type="submit" formmethod="post"

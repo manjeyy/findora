@@ -1,45 +1,70 @@
-<% String sectionLabel = (String) request.getAttribute("sectionLabel");
+<%
+    String sectionLabel = (String) request.getAttribute("sectionLabel");
     if (sectionLabel == null) {
         sectionLabel = "Admin Console";
     }
+
     String pageTitle = (String) request.getAttribute("pageTitle");
     if (pageTitle == null) {
         pageTitle = "Administrator";
     }
+
     String pageActionsHtml = (String) request.getAttribute("pageActionsHtml");
+
     String searchPlaceholder = (String) request.getAttribute("searchPlaceholder");
     if (searchPlaceholder == null) {
         searchPlaceholder = "Search institutional data...";
     }
 %>
-<header class="bg-slate-50 sticky top-0 z-30 flex justify-between items-center px-8 py-4 w-full">
-    <div class="flex items-center gap-6">
-        <div class="relative flex items-center">
-            <span class="material-symbols-outlined absolute left-3 text-slate-400" data-icon="search">search</span>
-            <input class="bg-surface-container-highest border-none rounded-full py-2 pl-10 pr-4 text-sm w-80 focus:ring-2 focus:ring-primary/20"
-                   placeholder="<%= searchPlaceholder %>" type="text"/>
-        </div>
-        <div class="ml-4">
-            <p class="text-xs font-semibold uppercase tracking-[0.12em] text-sky-700"><%= sectionLabel %>
-            </p>
-            <h2 class="text-lg font-bold"><%= pageTitle %>
-            </h2>
+
+<header class="fixed top-0 left-64 right-0 h-20 bg-white border-b border-slate-200 z-50 flex items-center justify-between px-6">
+
+    <!-- Left: Section + Title -->
+    <div class="flex flex-col justify-center">
+        <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
+            <%= sectionLabel %>
+        </p>
+        <h2 class="text-lg font-semibold text-slate-800">
+            <%= pageTitle %>
+        </h2>
+    </div>
+
+    <!-- Center: Search -->
+    <div class="flex-1 flex justify-center px-6">
+        <div class="relative w-full max-w-md">
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+                search
+            </span>
+            <input
+                    type="text"
+                    placeholder="<%= searchPlaceholder %>"
+                    class="w-full bg-slate-100 border border-slate-200 rounded-lg py-2 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:bg-white transition"
+            />
         </div>
     </div>
+
+    <!-- Right: Actions -->
     <div class="flex items-center gap-4">
-        <div class="hidden md:block mr-4">
-            <% if (pageActionsHtml != null) {
-                out.print(pageActionsHtml);
-            } %>
+
+        <% if (pageActionsHtml != null) { %>
+        <div class="hidden md:block">
+            <%= pageActionsHtml %>
         </div>
-        <button class="p-2 rounded-full hover:bg-slate-200/50 transition-colors relative">
-            <span class="material-symbols-outlined text-slate-500" data-icon="notifications">notifications</span>
-            <span class="absolute top-2 right-2 w-2 h-2 bg-secondary rounded-full"></span>
+        <% } %>
+
+        <!-- Notifications -->
+        <button class="relative p-2 rounded-full hover:bg-slate-100 transition">
+            <span class="material-symbols-outlined text-slate-600">notifications</span>
+            <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full"></span>
         </button>
-        <div class="h-8 w-8 rounded-full overflow-hidden border border-primary/10">
+
+        <!-- Profile -->
+        <div class="h-9 w-9 rounded-full overflow-hidden border border-slate-200">
             <img alt="User profile"
-                 data-alt="professional portrait of a high-level system administrator in a clean modern setting with soft lighting"
-                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuDwUKQRQgbtbmFV-mnM9Mis2cq643Zy80lvMYrtAm93EU7-zvUQgVRhSR7DttDxhIQrX02B9Dnw5A5z4MSQUMsbfZzI1C2fEhbR_jXuPJiagLJ1DrnzrJubEm6mtnH7BLhDs5mWQUGY36lynfJD1rmeZiGaWjc7LjPcUj__MB75hXWt5bguKdEsWmirFs-Y3pSBJQFhyjKCQJufA93jAB8C-YQA85lbvrlTWQLpjgNiozFqOGyHEy6i0_-eRaVmiCKIt6-JNVUyes"/>
+                 src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbLn77P1T_bjhytVmUGu3TK6DS479gDxC9iQ&s" />
         </div>
+
+
     </div>
 </header>
+<div class="w-full h-20"></div>

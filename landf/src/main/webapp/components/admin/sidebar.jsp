@@ -43,9 +43,9 @@
     </nav>
 
     <div class="mt-auto pt-6 border-t border-outline-variant/10">
-        <button class="w-full flex items-center justify-center gap-2 bg-secondary-container text-on-secondary-container py-3 rounded-lg font-bold hover:shadow-lg transition-all active:scale-95">
-            <span class="material-symbols-outlined text-sm" data-icon="add">add</span>
-            Report Found Item
-        </button>
+        <a href="<%= request.getContextPath() %>/auth/logout" class="w-full flex items-center justify-center gap-2 bg-red-100 text-red-700 py-3 rounded-lg font-bold hover:bg-red-200 transition-all active:scale-95">
+            <span class="material-symbols-outlined text-sm">logout</span>
+            Logout
+        </a>
     </div>
 </aside>
