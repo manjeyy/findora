@@ -6,6 +6,7 @@ public class AdminUserView {
     private final String username;
     private final String email;
     private final String role;
+    private final Integer locationId;
     private final String status;
     private final int points;
     private final double reputationScore;
@@ -17,6 +18,7 @@ public class AdminUserView {
             String username,
             String email,
             String role,
+            Integer locationId,
             String status,
             int points,
             double reputationScore,
@@ -27,6 +29,7 @@ public class AdminUserView {
         this.username = username;
         this.email = email;
         this.role = role;
+        this.locationId = locationId;
         this.status = status;
         this.points = points;
         this.reputationScore = reputationScore;
@@ -48,6 +51,10 @@ public class AdminUserView {
 
     public String getRole() {
         return role;
+    }
+
+    public Integer getLocationId() {
+        return locationId;
     }
 
     public String getStatus() {

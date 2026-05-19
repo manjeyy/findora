@@ -14,21 +14,21 @@ import com.landf.features.database.ConnectionManager;
 public class UserDAO {
 
     private static final String INSERT_USER_SQL
-            = "INSERT INTO Users (username, email, password, role) VALUES (?, ?, ?, ?)";
+            = "INSERT INTO Users (username, email, password, role, location_id) VALUES (?, ?, ?, ?, ?)";
     private static final String SELECT_USER_BY_USERNAME_SQL
-            = "SELECT user_id, username, email, password, role, status, created_at FROM Users WHERE username = ? LIMIT 1";
+            = "SELECT user_id, username, email, password, role, location_id, status, created_at FROM Users WHERE username = ? LIMIT 1";
     private static final String SELECT_USER_BY_EMAIL_SQL
-            = "SELECT user_id, username, email, password, role, status, created_at FROM Users WHERE email = ? LIMIT 1";
+            = "SELECT user_id, username, email, password, role, location_id, status, created_at FROM Users WHERE email = ? LIMIT 1";
     private static final String SELECT_USER_BY_ID_SQL
-            = "SELECT user_id, username, email, password, role, status, created_at FROM Users WHERE user_id = ? LIMIT 1";
+            = "SELECT user_id, username, email, password, role, location_id, status, created_at FROM Users WHERE user_id = ? LIMIT 1";
     private static final String SELECT_ALL_USERS_SQL
-            = "SELECT user_id, username, email, password, role, status, created_at FROM Users ORDER BY user_id";
+            = "SELECT user_id, username, email, password, role, location_id, status, created_at FROM Users ORDER BY user_id";
     private static final String EXISTS_USERNAME_SQL
             = "SELECT 1 FROM Users WHERE username = ? LIMIT 1";
     private static final String EXISTS_EMAIL_SQL
             = "SELECT 1 FROM Users WHERE email = ? LIMIT 1";
     private static final String UPDATE_USER_SQL
-            = "UPDATE Users SET username = ?, email = ?, role = ?, status = ? WHERE user_id = ?";
+            = "UPDATE Users SET username = ?, email = ?, role = ?, location_id = ?, status = ? WHERE user_id = ?";
     private static final String DELETE_USER_SQL
             = "DELETE FROM Users WHERE user_id = ?";
     private static final String LIST_USER_ITEMS_SQL = """
@@ -130,6 +130,11 @@ public class UserDAO {
             statement.setString(2, user.getEmail());
             statement.setString(3, user.getPassword());
             statement.setString(4, user.getRole());
+            if (user.getLocationId() == null) {
+                statement.setNull(5, java.sql.Types.INTEGER);
+            } else {
+                statement.setInt(5, user.getLocationId());
+            }
 
             int affectedRows = statement.executeUpdate();
             if (affectedRows == 0) {
@@ -248,6 +253,7 @@ public class UserDAO {
                 resultSet.getString("email"),
                 resultSet.getString("password"),
                 resultSet.getString("role"),
+                resultSet.getObject("location_id") == null ? null : resultSet.getInt("location_id"),
                 resultSet.getString("status"),
                 createdAtValue
         );
@@ -271,8 +277,13 @@ public class UserDAO {
             statement.setString(1, user.getUsername());
             statement.setString(2, user.getEmail());
             statement.setString(3, user.getRole());
-            statement.setString(4, user.getStatus());
-            statement.setInt(5, user.getUser_id());
+            if (user.getLocationId() == null) {
+                statement.setNull(4, java.sql.Types.INTEGER);
+            } else {
+                statement.setInt(4, user.getLocationId());
+            }
+            statement.setString(5, user.getStatus());
+            statement.setInt(6, user.getUser_id());
             return statement.executeUpdate() > 0;
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();

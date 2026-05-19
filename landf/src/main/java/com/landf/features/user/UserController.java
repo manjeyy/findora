@@ -25,6 +25,7 @@ public class UserController extends HttpServlet {
     private static final String REGISTER_VIEW = "/pages/auth/register.jsp";
     private static final String DASHBOARD_VIEW = "/pages/dashboard/user/home.jsp";
     private static final String ADMIN_ROLE = "admin";
+    private static final String LOCATION_ADMIN_ROLE = "location_admin";
     private static final String DEFAULT_ROLE = "user";
     private static final int MIN_PASSWORD_LENGTH = 8;
     private static final Pattern USERNAME_PATTERN = Pattern.compile("^[A-Za-z0-9_]{3,30}$");
@@ -214,6 +215,7 @@ public class UserController extends HttpServlet {
         String username = normalize(request.getParameter("username"));
         String email = normalize(request.getParameter("email"));
         String role = normalize(request.getParameter("role"));
+        String locationIdValue = normalize(request.getParameter("locationId"));
         String status = normalize(request.getParameter("status"));
 
         boolean changed = false;
@@ -237,6 +239,16 @@ public class UserController extends HttpServlet {
         if (!role.isBlank()) {
             currentUser.setRole(role);
             changed = true;
+        }
+
+        if (!locationIdValue.isBlank()) {
+            try {
+                int locationId = Integer.parseInt(locationIdValue);
+                currentUser.setLocationId(locationId > 0 ? locationId : null);
+                changed = true;
+            } catch (NumberFormatException ex) {
+                return null;
+            }
         }
 
         if (!status.isBlank()) {
@@ -297,11 +309,12 @@ public class UserController extends HttpServlet {
 
     private String toJsonUser(UserModel user) {
         return String.format(
-                "{\"user_id\":%d,\"username\":\"%s\",\"email\":\"%s\",\"role\":\"%s\",\"status\":\"%s\",\"created_at\":%s}",
+                "{\"user_id\":%d,\"username\":\"%s\",\"email\":\"%s\",\"role\":\"%s\",\"location_id\":%s,\"status\":\"%s\",\"created_at\":%s}",
                 user.getUser_id(),
                 escape(user.getUsername()),
                 escape(user.getEmail()),
                 escape(user.getRole()),
+                user.getLocationId() == null ? "null" : user.getLocationId().toString(),
                 escape(user.getStatus()),
                 user.getCreated_at() == null ? "null" : "\"" + escape(user.getCreated_at()) + "\"");
     }
@@ -560,6 +573,11 @@ public class UserController extends HttpServlet {
         String role = jwt.get().getClaim("role").asString();
         if (ADMIN_ROLE.equalsIgnoreCase(role)) {
             response.sendRedirect(request.getContextPath() + "/admin/dashboard");
+            return;
+        }
+
+        if (LOCATION_ADMIN_ROLE.equalsIgnoreCase(role)) {
+            response.sendRedirect(request.getContextPath() + "/location-admin/dashboard");
             return;
         }
 

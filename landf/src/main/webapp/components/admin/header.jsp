@@ -1,27 +1,70 @@
 <%
     String sectionLabel = (String) request.getAttribute("sectionLabel");
-    if (sectionLabel == null) { sectionLabel = "Admin Console"; }
+    if (sectionLabel == null) {
+        sectionLabel = "Admin Console";
+    }
+
     String pageTitle = (String) request.getAttribute("pageTitle");
-    if (pageTitle == null) { pageTitle = ""; }
+    if (pageTitle == null) {
+        pageTitle = "Administrator";
+    }
+
     String pageActionsHtml = (String) request.getAttribute("pageActionsHtml");
+
+    String searchPlaceholder = (String) request.getAttribute("searchPlaceholder");
+    if (searchPlaceholder == null) {
+        searchPlaceholder = "Search institutional data...";
+    }
 %>
-<header class="sticky top-0 z-30 bg-slate-50/80 backdrop-blur-md flex justify-between items-center px-6 py-6 w-full rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-    <div class="flex flex-col">
-        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-sky-700"><%= sectionLabel %></p>
-        <h1 class="mt-1 text-3xl font-extrabold tracking-tight text-slate-900"><%= pageTitle %></h1>
-        <nav class="flex gap-2 text-xs font-medium text-outline mt-1 uppercase tracking-widest">
-            <span>Admin</span>
-            <span class="text-outline-variant">/</span>
-            <span><%= pageTitle %></span>
-        </nav>
+
+<header class="fixed top-0 left-64 right-0 h-20 bg-white border-b border-slate-200 z-50 flex items-center justify-between px-6">
+
+    <!-- Left: Section + Title -->
+    <div class="flex flex-col justify-center">
+        <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
+            <%= sectionLabel %>
+        </p>
+        <h2 class="text-lg font-semibold text-slate-800">
+            <%= pageTitle %>
+        </h2>
     </div>
-    <div class="flex items-center gap-6">
-        <% if (pageActionsHtml != null) { out.print(pageActionsHtml); } %>
-        <button class="p-2 text-slate-500 hover:bg-slate-200/50 transition-colors rounded-full">
-            <span class="material-symbols-outlined" data-icon="notifications">notifications</span>
-        </button>
-        <div class="w-10 h-10 rounded-full bg-surface-container-high border-2 border-primary-fixed overflow-hidden">
-            <img alt="User profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDk_qdDayT819rczjRNBJJg2OXxtayh53zxEWhcz7PjrznFZYQ0sYwwOQBe8mgKYIlZZZ_UKKuzhSlUJErt6Dz2SRk3UGELHS6TkD2Hi3UvWA7EjNHagRdP_cJjxYs_EzZCkJa0hz7U3ZDVKk0nPvXEx_cuBUMHjy53FKI2BsM4-51sZal0y9Z6rPh9H8Og3EdWcuTzHa-mIUb9hqzFNfYZZgTqvHSDdgSlyfO8ooha7toAKD22kLdat9EeF2VJZA4tcISky7hPwa0"/>
+
+    <!-- Center: Search -->
+    <div class="flex-1 flex justify-center px-6">
+        <div class="relative w-full max-w-md">
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+                search
+            </span>
+            <input
+                    type="text"
+                    placeholder="<%= searchPlaceholder %>"
+                    class="w-full bg-slate-100 border border-slate-200 rounded-lg py-2 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:bg-white transition"
+            />
         </div>
     </div>
+
+    <!-- Right: Actions -->
+    <div class="flex items-center gap-4">
+
+        <% if (pageActionsHtml != null) { %>
+        <div class="hidden md:block">
+            <%= pageActionsHtml %>
+        </div>
+        <% } %>
+
+        <!-- Notifications -->
+        <button class="relative p-2 rounded-full hover:bg-slate-100 transition">
+            <span class="material-symbols-outlined text-slate-600">notifications</span>
+            <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full"></span>
+        </button>
+
+        <!-- Profile -->
+        <div class="h-9 w-9 rounded-full overflow-hidden border border-slate-200">
+            <img alt="User profile"
+                 src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbLn77P1T_bjhytVmUGu3TK6DS479gDxC9iQ&s" />
+        </div>
+
+
+    </div>
 </header>
+<div class="w-full h-20"></div>

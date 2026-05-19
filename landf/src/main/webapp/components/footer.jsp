@@ -1,31 +1,18 @@
 <footer
-  class="bg-slate-50 dark:bg-slate-900 w-full py-6 mt-auto border-t border-slate-200/10 flex flex-col md:flex-row justify-between items-center px-12"
+        class="bg-slate-50 border-t border-slate-200/10 w-full py-6 mt-12 flex flex-col md:flex-row justify-between items-center px-12 font-inter text-xs tracking-wide uppercase opacity-80 hover:opacity-100 transition-all"
 >
-  <div
-    class="font-manrope font-black text-teal-900 dark:text-teal-100 uppercase text-xs tracking-tighter"
-  >
-    Findora Admin
-  </div>
-  <p
-    class="font-inter text-xs tracking-wide uppercase text-slate-400 my-4 md:my-0"
-  >
-    © 2024 Findora Lost &amp; Found. Managed Institutional Stewardship.
-  </p>
-  <div class="flex gap-6">
-    <a
-      class="font-inter text-xs tracking-wide uppercase text-slate-400 hover:text-orange-500 transition-colors opacity-80 hover:opacity-100"
-      href="#"
-      >Privacy Policy</a
-    >
-    <a
-      class="font-inter text-xs tracking-wide uppercase text-slate-400 hover:text-orange-500 transition-colors opacity-80 hover:opacity-100"
-      href="#"
-      >Terms of Service</a
-    >
-    <a
-      class="font-inter text-xs tracking-wide uppercase text-slate-400 hover:text-orange-500 transition-colors opacity-80 hover:opacity-100"
-      href="#"
-      >Support</a
-    >
-  </div>
+    <p class="font-manrope font-black text-teal-900 mb-4 md:mb-0">
+        © 2024 Findora Lost &amp; Found. Managed Institutional Stewardship.
+    </p>
+    <div class="flex gap-8">
+        <a class="text-slate-400 hover:text-orange-500 transition-colors" href="#"
+        >Privacy Policy</a
+        >
+        <a class="text-slate-400 hover:text-orange-500 transition-colors" href="#"
+        >Terms of Service</a
+        >
+        <a class="text-slate-400 hover:text-orange-500 transition-colors" href="#"
+        >Support</a
+        >
+    </div>
 </footer>

@@ -189,6 +189,7 @@ public class AdminDAO {
                 u.username,
                 u.email,
                 u.role,
+                u.location_id,
                 u.status,
                 COALESCE(up.points, 0) AS points,
                 COALESCE(r.score, 0) AS reputation_score,
@@ -202,7 +203,7 @@ public class AdminDAO {
 
     private static final String UPDATE_USER_SQL = """
             UPDATE Users
-            SET role = ?, status = ?, updated_at = NOW()
+            SET role = ?, location_id = ?, status = ?, updated_at = NOW()
             WHERE user_id = ?
             """;
 
@@ -505,6 +506,8 @@ public class AdminDAO {
 
                 int affectedRows;
                 switch (normalizedAction) {
+                    case "approve" ->
+                        affectedRows = executeSingleItemUpdate(connection, MARK_ITEM_OPEN_SQL, itemId);
                     case "close" ->
                         affectedRows = executeSingleItemUpdate(connection, MARK_ITEM_CLOSED_SQL, itemId);
                     case "reopen" ->
@@ -555,6 +558,7 @@ public class AdminDAO {
                         resultSet.getString("username"),
                         resultSet.getString("email"),
                         resultSet.getString("role"),
+                        resultSet.getObject("location_id") == null ? null : resultSet.getInt("location_id"),
                         resultSet.getString("status"),
                         resultSet.getInt("points"),
                         resultSet.getDouble("reputation_score"),
@@ -569,7 +573,7 @@ public class AdminDAO {
         return users;
     }
 
-    public boolean updateUser(int userId, String role, String status) {
+    public boolean updateUser(int userId, String role, Integer locationId, String status) {
         if (!isRoleAllowed(role) || !isUserStatusAllowed(status)) {
             return false;
         }
@@ -577,8 +581,13 @@ public class AdminDAO {
         try (Connection connection = openConnection(); PreparedStatement statement = connection.prepareStatement(UPDATE_USER_SQL)) {
 
             statement.setString(1, role.toLowerCase());
-            statement.setString(2, status.toLowerCase());
-            statement.setInt(3, userId);
+            if (locationId == null || locationId <= 0) {
+                statement.setNull(2, java.sql.Types.INTEGER);
+            } else {
+                statement.setInt(2, locationId);
+            }
+            statement.setString(3, status.toLowerCase());
+            statement.setInt(4, userId);
 
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -808,7 +817,8 @@ public class AdminDAO {
     }
 
     private boolean isItemActionAllowed(String action) {
-        return "close".equalsIgnoreCase(action)
+        return "approve".equalsIgnoreCase(action)
+                || "close".equalsIgnoreCase(action)
                 || "reopen".equalsIgnoreCase(action)
                 || "flag".equalsIgnoreCase(action)
                 || "mark_spam".equalsIgnoreCase(action);

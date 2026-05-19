@@ -9,6 +9,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import static com.landf.features.auth.AuthConstants.AUTH_LOCATION_ID_KEY;
 import com.landf.features.user.UserModel;
 
 import jakarta.servlet.http.Cookie;
@@ -18,6 +19,7 @@ public class JwtService {
 
     private static final String USER_ID_CLAIM = "userId";
     private static final String ROLE_CLAIM = "role";
+    private static final String LOCATION_ID_CLAIM = "locationId";
     private static final String DEFAULT_SECRET = "manjeyyy-yyyyy-yyyyyy-yyyyyyy-yyyyyy-yyyyy";
 
     private final Algorithm algorithm;
@@ -41,6 +43,7 @@ public class JwtService {
                 .withSubject(user.getUsername())
                 .withClaim(USER_ID_CLAIM, user.getUser_id())
                 .withClaim(ROLE_CLAIM, user.getRole())
+                .withClaim(LOCATION_ID_CLAIM, user.getLocationId())
                 .withIssuedAt(now)
                 .withExpiresAt(expiresAt)
                 .sign(algorithm);
@@ -77,6 +80,10 @@ public class JwtService {
         request.setAttribute(AuthConstants.AUTH_USER_KEY, jwt.getSubject());
         request.setAttribute(AuthConstants.AUTH_USER_ID_KEY, jwt.getClaim(USER_ID_CLAIM).asInt());
         request.setAttribute(AuthConstants.AUTH_ROLE_KEY, jwt.getClaim(ROLE_CLAIM).asString());
+        Integer locationId = jwt.getClaim(LOCATION_ID_CLAIM).asInt();
+        if (locationId != null) {
+            request.setAttribute(AUTH_LOCATION_ID_KEY, locationId);
+        }
     }
 
     public Cookie buildAuthCookie(String token, HttpServletRequest request) {
