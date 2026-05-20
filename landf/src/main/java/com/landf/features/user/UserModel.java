@@ -106,4 +106,14 @@ public class UserModel {
     public void setCreated_at(String created_at) {
         this.created_at = created_at;
     }
+
+    private String profilePhoto;
+
+    public String getProfilePhoto() {
+        return profilePhoto;
+    }
+
+    public void setProfilePhoto(String profilePhoto) {
+        this.profilePhoto = profilePhoto;
+    }
 }

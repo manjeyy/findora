@@ -519,7 +519,7 @@ public class UserController extends HttpServlet {
         }
 
         issueAuthCookie(createdUser.get(), request, response);
-        response.sendRedirect(request.getContextPath() + "/dashboard");
+        response.sendRedirect(request.getContextPath() + "/home");
     }
 
     private void handleLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -553,11 +553,15 @@ public class UserController extends HttpServlet {
         }
 
         issueAuthCookie(user.get(), request, response);
-        response.sendRedirect(request.getContextPath() + "/dashboard");
+        response.sendRedirect(request.getContextPath() + "/home");
     }
 
     private void handleLogout(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.addCookie(jwtService.buildClearedAuthCookie(request));
+        jakarta.servlet.http.HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
         response.sendRedirect(request.getContextPath() + "/auth/login");
     }
 
@@ -587,7 +591,7 @@ public class UserController extends HttpServlet {
     private void handleLoginView(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         if (isAuthenticated(request)) {
-            response.sendRedirect(request.getContextPath() + "/dashboard");
+            response.sendRedirect(request.getContextPath() + "/home");
             return;
         }
 
@@ -597,7 +601,7 @@ public class UserController extends HttpServlet {
     private void handleRegisterView(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         if (isAuthenticated(request)) {
-            response.sendRedirect(request.getContextPath() + "/dashboard");
+            response.sendRedirect(request.getContextPath() + "/home");
             return;
         }
 

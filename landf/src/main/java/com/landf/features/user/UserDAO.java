@@ -13,22 +13,31 @@ import com.landf.features.database.ConnectionManager;
 
 public class UserDAO {
 
+    static {
+        try (Connection connection = ConnectionManager.getConnection(); PreparedStatement statement = connection.prepareStatement(
+                "ALTER TABLE Users ADD COLUMN profile_photo VARCHAR(255) NULL")) {
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            // Column already exists or database/table not ready yet
+        }
+    }
+
     private static final String INSERT_USER_SQL
             = "INSERT INTO Users (username, email, password, role, location_id) VALUES (?, ?, ?, ?, ?)";
     private static final String SELECT_USER_BY_USERNAME_SQL
-            = "SELECT user_id, username, email, password, role, location_id, status, created_at FROM Users WHERE username = ? LIMIT 1";
+            = "SELECT user_id, username, email, password, role, location_id, status, profile_photo, created_at FROM Users WHERE username = ? LIMIT 1";
     private static final String SELECT_USER_BY_EMAIL_SQL
-            = "SELECT user_id, username, email, password, role, location_id, status, created_at FROM Users WHERE email = ? LIMIT 1";
+            = "SELECT user_id, username, email, password, role, location_id, status, profile_photo, created_at FROM Users WHERE email = ? LIMIT 1";
     private static final String SELECT_USER_BY_ID_SQL
-            = "SELECT user_id, username, email, password, role, location_id, status, created_at FROM Users WHERE user_id = ? LIMIT 1";
+            = "SELECT user_id, username, email, password, role, location_id, status, profile_photo, created_at FROM Users WHERE user_id = ? LIMIT 1";
     private static final String SELECT_ALL_USERS_SQL
-            = "SELECT user_id, username, email, password, role, location_id, status, created_at FROM Users ORDER BY user_id";
+            = "SELECT user_id, username, email, password, role, location_id, status, profile_photo, created_at FROM Users ORDER BY user_id";
     private static final String EXISTS_USERNAME_SQL
             = "SELECT 1 FROM Users WHERE username = ? LIMIT 1";
     private static final String EXISTS_EMAIL_SQL
             = "SELECT 1 FROM Users WHERE email = ? LIMIT 1";
     private static final String UPDATE_USER_SQL
-            = "UPDATE Users SET username = ?, email = ?, role = ?, location_id = ?, status = ? WHERE user_id = ?";
+            = "UPDATE Users SET username = ?, email = ?, role = ?, location_id = ?, status = ?, profile_photo = ? WHERE user_id = ?";
     private static final String DELETE_USER_SQL
             = "DELETE FROM Users WHERE user_id = ?";
     private static final String LIST_USER_ITEMS_SQL = """
@@ -112,6 +121,8 @@ public class UserDAO {
             WHERE um.user_id = ?
             ORDER BY um.updated_at DESC
             """;
+    private static final String SELECT_BADGE_BY_NAME_SQL = "SELECT badge_id FROM Badges WHERE name = ? LIMIT 1";
+    private static final String INSERT_USER_BADGE_SQL = "INSERT IGNORE INTO UserBadges (user_id, badge_id) VALUES (?, ?)";
 
     private final ConnectionManager connectionManager;
 
@@ -247,7 +258,7 @@ public class UserDAO {
         Timestamp createdAt = resultSet.getTimestamp("created_at");
         String createdAtValue = createdAt == null ? null : createdAt.toString();
 
-        return new UserModel(
+        UserModel user = new UserModel(
                 resultSet.getInt("user_id"),
                 resultSet.getString("username"),
                 resultSet.getString("email"),
@@ -257,6 +268,14 @@ public class UserDAO {
                 resultSet.getString("status"),
                 createdAtValue
         );
+
+        try {
+            user.setProfilePhoto(resultSet.getString("profile_photo"));
+        } catch (SQLException e) {
+            // Ignore if not present in custom result sets
+        }
+
+        return user;
     }
 
     public boolean updatePasswordByUsername(String username, String newHashedPassword) {
@@ -283,7 +302,20 @@ public class UserDAO {
                 statement.setInt(4, user.getLocationId());
             }
             statement.setString(5, user.getStatus());
-            statement.setInt(6, user.getUser_id());
+            statement.setString(6, user.getProfilePhoto());
+            statement.setInt(7, user.getUser_id());
+            return statement.executeUpdate() > 0;
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean updateProfilePhoto(int userId, String photoUrl) {
+        final String sql = "UPDATE Users SET profile_photo = ? WHERE user_id = ?";
+        try (Connection connection = openConnection(); PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, photoUrl);
+            statement.setInt(2, userId);
             return statement.executeUpdate() > 0;
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -437,6 +469,27 @@ public class UserDAO {
         }
 
         return missions;
+    }
+
+    public boolean awardBadgeByName(int userId, String badgeName) {
+        try (Connection connection = openConnection(); PreparedStatement findStmt = connection.prepareStatement(SELECT_BADGE_BY_NAME_SQL)) {
+            findStmt.setString(1, badgeName);
+            try (ResultSet rs = findStmt.executeQuery()) {
+                if (rs.next()) {
+                    int badgeId = rs.getInt("badge_id");
+                    try (PreparedStatement ins = connection.prepareStatement(INSERT_USER_BADGE_SQL)) {
+                        ins.setInt(1, userId);
+                        ins.setInt(2, badgeId);
+                        int updated = ins.executeUpdate();
+                        return updated > 0;
+                    }
+                }
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 
     private String toDateTimeString(Timestamp timestamp) {
