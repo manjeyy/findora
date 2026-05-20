@@ -32,9 +32,8 @@
     <div class="max-w-4xl mx-auto">
         <!-- Header -->
         <header class="mb-12">
-            <span class="text-primary font-semibold tracking-widest text-[0.6875rem] uppercase mb-2 block">Institutional Stewardship</span>
+            <span class="text-primary font-semibold tracking-widest text-[0.6875rem] mt-24 uppercase mb-2 block"> </span>
             <h1 class="text-4xl lg:text-5xl font-headline font-extrabold text-primary mb-4 tracking-tight">Report a Lost Item</h1>
-            <p class="text-on-surface-variant max-w-xl body-md">Complete the form below to report your lost item. Detailed descriptions increase the probability of a successful match.</p>
         </header>
 
         <!-- Form Section -->
@@ -116,38 +115,6 @@
         </form>
 
         <!-- Additional Info -->
-        <div class="mt-16 pt-12 border-t border-outline-variant/15">
-            <h3 class="text-xl font-bold headline-font mb-6">Tips for Better Matches</h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="flex gap-4">
-                    <div class="w-12 h-12 rounded-lg bg-primary-fixed flex items-center justify-center flex-shrink-0">
-                        <span class="material-symbols-outlined text-on-primary">camera_alt</span>
-                    </div>
-                    <div>
-                        <h4 class="font-bold mb-1">Clear Photo</h4>
-                        <p class="text-sm text-on-surface-variant">A clear, well-lit photo greatly improves match chances</p>
-                    </div>
-                </div>
-                <div class="flex gap-4">
-                    <div class="w-12 h-12 rounded-lg bg-primary-fixed flex items-center justify-center flex-shrink-0">
-                        <span class="material-symbols-outlined text-on-primary">description</span>
-                    </div>
-                    <div>
-                        <h4 class="font-bold mb-1">Specific Details</h4>
-                        <p class="text-sm text-on-surface-variant">Include unique characteristics and identifying marks</p>
-                    </div>
-                </div>
-                <div class="flex gap-4">
-                    <div class="w-12 h-12 rounded-lg bg-primary-fixed flex items-center justify-center flex-shrink-0">
-                        <span class="material-symbols-outlined text-on-primary">schedule</span>
-                    </div>
-                    <div>
-                        <h4 class="font-bold mb-1">Accurate Date</h4>
-                        <p class="text-sm text-on-surface-variant">Provide the exact or approximate date you lost the item</p>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 </main>
 

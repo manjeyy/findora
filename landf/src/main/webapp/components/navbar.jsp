@@ -1,22 +1,172 @@
-<header class="bg-slate-50 font-manrope text-sm font-medium full-width top-0 z-50 sticky flex justify-between items-center px-6 py-3 w-full shadow-sm"
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<header
+  class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-lg border-b border-outline-variant/10 shadow-lg"
 >
-    <div class="flex items-center gap-8"><span class="text-xl font-bold text-teal-900 tracking-tight">Findora</span>
-        <div class="hidden md:flex items-center bg-slate-100 rounded-full px-4 py-1.5 gap-3"><span
-                class="material-symbols-outlined text-slate-500 text-lg">search</span> <input
-                class="bg-transparent border-none focus:ring-0 text-sm w-64 placeholder:text-slate-400"
-                placeholder="Search for items..." type="text"/></div>
+  <nav
+    class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center"
+  >
+    <!-- Logo -->
+    <a
+      href="${pageContext.request.contextPath}/home"
+      class="flex items-center gap-2 group"
+    >
+      <div
+        class="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-primary-container flex items-center justify-center group-hover:shadow-lg transition-shadow"
+      >
+        <span class="material-symbols-outlined text-white text-xl"
+          >location_on</span
+        >
+      </div>
+      <span
+        class="text-2xl font-bold text-primary tracking-tight hidden sm:inline-block"
+        >Findora</span
+      >
+    </a>
+
+    <!-- Desktop Navigation -->
+    <div class="hidden md:flex items-center gap-1">
+      <a
+        href="${pageContext.request.contextPath}/home"
+        class="px-3 py-2 rounded-lg text-sm font-medium text-on-surface hover:bg-surface-container-lowest transition-colors"
+        >Home</a
+      >
+      <c:if test="${authRole == 'admin' || authRole == 'location_admin'}">
+        <a
+          href="${pageContext.request.contextPath}/dashboard"
+          class="px-3 py-2 rounded-lg text-sm font-medium text-on-surface hover:bg-surface-container-lowest transition-colors"
+          >Dashboard</a
+        >
+      </c:if>
+      <a
+        href="${pageContext.request.contextPath}/browse-items"
+        class="px-3 py-2 rounded-lg text-sm font-medium text-on-surface hover:bg-surface-container-lowest transition-colors"
+        >Explore</a
+      >
+      <a
+        href="${pageContext.request.contextPath}/report-found-item"
+        class="px-3 py-2 rounded-lg text-sm font-medium text-primary font-semibold hover:bg-primary/10 transition-colors"
+        >Found Items</a
+      >
+      <a
+        href="${pageContext.request.contextPath}/report-lost-item"
+        class="px-3 py-2 rounded-lg text-sm font-medium text-on-surface hover:bg-surface-container-lowest transition-colors"
+        >Lost Items</a
+      >
     </div>
-    <nav class="hidden md:flex items-center gap-6"><a class="text-teal-700 font-semibold transition-colors" href="#">Dashboard</a>
-        <a class="text-slate-500 hover:bg-slate-200/50 transition-colors px-2 py-1 rounded" href="#">Explore</a> <a
-                class="text-slate-500 hover:bg-slate-200/50 transition-colors px-2 py-1 rounded" href="#">Claims</a>
-    </nav>
-    <div class="flex items-center gap-4">
-        <button class="p-2 rounded-full hover:bg-slate-200/50 transition-colors relative"><span
-                class="material-symbols-outlined text-teal-900 ">notifications</span> <span
-                class="absolute top-2 right-2 w-2 h-2 bg-secondary rounded-full"></span></button>
-        <div class="flex items-center gap-3 pl-2 border-l border-slate-200/20">
-            <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center"><span
-                    class="material-symbols-outlined text-primary">person</span></div>
-        </div>
+
+    <!-- Right Section -->
+    <div class="flex items-center gap-3 sm:gap-4">
+      <!-- Search Icon (Mobile) -->
+      <button
+        class="md:hidden p-2 rounded-lg text-on-surface hover:bg-surface-container-lowest transition-colors"
+      >
+        <span class="material-symbols-outlined">search</span>
+      </button>
+
+      <!-- Notification -->
+      <button
+        class="p-2 rounded-lg text-on-surface hover:bg-surface-container-lowest transition-colors relative group"
+        title="Notifications"
+      >
+        <span class="material-symbols-outlined">notifications</span>
+        <span
+          class="absolute top-1 right-1 w-2.5 h-2.5 bg-error rounded-full"
+        ></span>
+      </button>
+
+      <!-- User Actions -->
+      <c:choose>
+        <c:when test="${not empty authUser}">
+          <a
+            href="${pageContext.request.contextPath}/profile"
+            class="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center hover:bg-primary/20 transition-colors overflow-hidden group"
+            title="Profile"
+          >
+            <c:choose>
+              <c:when test="${not empty sessionScope.profilePhoto}">
+                <img
+                  src="${sessionScope.profilePhoto}"
+                  alt="Avatar"
+                  class="w-full h-full object-cover"
+                />
+              </c:when>
+              <c:otherwise>
+                <span class="material-symbols-outlined text-primary"
+                  >person</span
+                >
+              </c:otherwise>
+            </c:choose>
+          </a>
+          <a
+            href="${pageContext.request.contextPath}/auth/logout"
+            class="hidden sm:inline-block px-4 py-2 rounded-lg text-sm font-semibold bg-surface-container-low text-on-surface hover:bg-surface-container-high transition-colors"
+          >
+            Sign out
+          </a>
+        </c:when>
+        <c:otherwise>
+          <a
+            href="${pageContext.request.contextPath}/auth/login"
+            class="px-4 py-2 rounded-lg text-sm font-semibold bg-primary text-on-primary hover:bg-primary-container transition-colors"
+          >
+            Sign in
+          </a>
+        </c:otherwise>
+      </c:choose>
+
+      <!-- Mobile Menu Button -->
+      <button
+        class="md:hidden p-2 rounded-lg text-on-surface hover:bg-surface-container-lowest transition-colors"
+        onclick="
+          document.getElementById('mobileMenu').classList.toggle('hidden')
+        "
+      >
+        <span class="material-symbols-outlined">menu</span>
+      </button>
     </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div
+    id="mobileMenu"
+    class="hidden md:hidden border-t border-outline-variant/10 bg-surface-container-lowest"
+  >
+    <div class="px-4 py-3 space-y-2">
+      <a
+        href="${pageContext.request.contextPath}/home"
+        class="block px-3 py-2 rounded-lg text-sm font-medium text-on-surface hover:bg-surface-container-low transition-colors"
+        >Home</a
+      >
+      <c:if test="${authRole == 'admin' || authRole == 'location_admin'}">
+        <a
+          href="${pageContext.request.contextPath}/dashboard"
+          class="block px-3 py-2 rounded-lg text-sm font-medium text-on-surface hover:bg-surface-container-low transition-colors"
+          >Dashboard</a
+        >
+      </c:if>
+      <a
+        href="${pageContext.request.contextPath}/browse-items"
+        class="block px-3 py-2 rounded-lg text-sm font-medium text-on-surface hover:bg-surface-container-low transition-colors"
+        >Explore Items</a
+      >
+      <a
+        href="${pageContext.request.contextPath}/report-found-item"
+        class="block px-3 py-2 rounded-lg text-sm font-semibold text-primary hover:bg-primary/10 transition-colors"
+        >Report Found Item</a
+      >
+      <a
+        href="${pageContext.request.contextPath}/report-lost-item"
+        class="block px-3 py-2 rounded-lg text-sm font-medium text-on-surface hover:bg-surface-container-low transition-colors"
+        >Report Lost Item</a
+      >
+      <c:if test="${empty authUser}">
+        <a
+          href="${pageContext.request.contextPath}/auth/logout"
+          class="block sm:hidden px-3 py-2 rounded-lg text-sm font-medium text-on-surface hover:bg-surface-container-low transition-colors mt-2 pt-2 border-t border-outline-variant/10"
+        >
+          Sign out
+        </a>
+      </c:if>
+    </div>
+  </div>
 </header>

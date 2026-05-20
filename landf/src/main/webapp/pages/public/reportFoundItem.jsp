@@ -29,16 +29,15 @@
         <div class="max-w-5xl mx-auto">
             <!-- Editorial Header -->
             <div class="mb-12">
-                <span class="text-secondary font-bold tracking-widest text-[0.65rem] uppercase mb-2 block">Institutional Stewardship</span>
+                <span class="text-secondary font-bold tracking-widest text-[0.65rem] mt-12 uppercase mb-2 block"> </span>
                 <h2 class="text-4xl md:text-5xl font-extrabold font-headline text-primary mb-4 leading-tight">Found Item Submission Portal</h2>
-                <p class="text-on-surface-variant max-w-xl text-lg leading-relaxed">Your professional integrity helps reconnect owners with their belongings. Please record the details with editorial precision.</p>
             </div>
 
             <!-- Form Section -->
-            <form method="POST" action="${pageContext.request.contextPath}/report-found-item" class="grid grid-cols-1 md:grid-cols-12 gap-8" enctype="multipart/form-data">
+            <form method="POST" action="${pageContext.request.contextPath}/report-found-item" class="grid grid-cols-1 md:grid-cols-12 gap-8 mt-24" enctype="multipart/form-data">
                 <!-- Image Upload: Left Column -->
                 <div class="md:col-span-12 lg:col-span-5 flex flex-col">
-                    <label class="font-headline font-bold text-lg text-primary mb-4">Photographic Documentation</label>
+                    <label class="font-headline font-bold text-lg text-primary mb-4">Photo</label>
                     <div class="relative group cursor-pointer flex-grow bg-surface-container-highest rounded-xl min-h-[320px] flex flex-col items-center justify-center border-2 border-dashed border-outline-variant hover:border-primary transition-all overflow-hidden">
                         <div class="absolute inset-0 z-0">
                             <div class="w-full h-full glass-effect"></div>
@@ -113,38 +112,7 @@
             </form>
 
             <!-- Guidelines -->
-            <div class="mt-16 pt-12 border-t border-outline-variant/15">
-                <h3 class="text-xl font-bold headline-font mb-6">Submission Guidelines</h3>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="flex gap-4">
-                        <div class="w-12 h-12 rounded-lg bg-secondary-fixed flex items-center justify-center flex-shrink-0">
-                            <span class="material-symbols-outlined text-on-secondary">verified_user</span>
-                        </div>
-                        <div>
-                            <h4 class="font-bold mb-1">Accuracy Matters</h4>
-                            <p class="text-sm text-on-surface-variant">Be precise about location and condition to facilitate successful recovery</p>
-                        </div>
-                    </div>
-                    <div class="flex gap-4">
-                        <div class="w-12 h-12 rounded-lg bg-secondary-fixed flex items-center justify-center flex-shrink-0">
-                            <span class="material-symbols-outlined text-on-secondary">image_quality</span>
-                        </div>
-                        <div>
-                            <h4 class="font-bold mb-1">Quality Photos</h4>
-                            <p class="text-sm text-on-surface-variant">Clear, high-resolution images improve identification and matching</p>
-                        </div>
-                    </div>
-                    <div class="flex gap-4">
-                        <div class="w-12 h-12 rounded-lg bg-secondary-fixed flex items-center justify-center flex-shrink-0">
-                            <span class="material-symbols-outlined text-on-secondary">policy</span>
-                        </div>
-                        <div>
-                            <h4 class="font-bold mb-1">Follow Protocol</h4>
-                            <p class="text-sm text-on-surface-variant">Items are held per institutional policy and local regulations</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            
         </div>
     </div>
 </main>

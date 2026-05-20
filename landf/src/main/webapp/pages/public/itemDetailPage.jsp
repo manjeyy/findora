@@ -36,7 +36,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <!-- Image Section -->
             <div class="lg:col-span-2">
-                <div class="relative rounded-xl overflow-hidden bg-surface-container-high h-96 lg:h-full min-h-[500px]">
+                <div class="relative rounded-xl overflow-hidden bg-surface-container-high h-96 lg:h-auto min-h-[100px]">
                     <c:if test="${not empty item.imageUrl}">
                         <img src="${item.imageUrl}" alt="${item.title}" class="w-full h-full object-cover"/>
                     </c:if>
@@ -162,11 +162,6 @@
                         </button>
                     </c:otherwise>
                 </c:choose>
-
-                <!-- Share Button -->
-                <button class="w-full bg-surface-container-high text-on-surface py-4 rounded-xl font-bold hover:bg-surface-container-low transition-colors">
-                    <span class="material-symbols-outlined mr-2">share</span> Share Item
-                </button>
 
                 <!-- Report Button -->
                 <a href="${pageContext.request.contextPath}/reports?targetType=item&targetId=${item.itemId}" class="w-full mt-4 inline-flex items-center justify-center text-error py-3 rounded-xl font-bold hover:bg-error-container/20 transition-colors text-sm">
