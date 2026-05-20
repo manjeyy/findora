@@ -63,17 +63,6 @@
         <span class="material-symbols-outlined">search</span>
       </button>
 
-      <!-- Notification -->
-      <button
-        class="p-2 rounded-lg text-on-surface hover:bg-surface-container-lowest transition-colors relative group"
-        title="Notifications"
-      >
-        <span class="material-symbols-outlined">notifications</span>
-        <span
-          class="absolute top-1 right-1 w-2.5 h-2.5 bg-error rounded-full"
-        ></span>
-      </button>
-
       <!-- User Actions -->
       <c:choose>
         <c:when test="${not empty authUser}">

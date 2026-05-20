@@ -17,6 +17,8 @@
     }
 %>
 
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <header class="fixed top-0 left-64 right-0 h-20 bg-white border-b border-slate-200 z-50 flex items-center justify-between px-6">
 
     <!-- Left: Section + Title -->
@@ -42,17 +44,23 @@
         </div>
         <% } %>
 
-        <!-- Notifications -->
-        <button class="relative p-2 rounded-full hover:bg-slate-100 transition">
-            <span class="material-symbols-outlined text-slate-600">notifications</span>
-            <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full"></span>
-        </button>
-
-        <!-- Profile -->
-        <div class="h-9 w-9 rounded-full overflow-hidden border border-slate-200">
-            <img alt="User profile"
-                 src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbLn77P1T_bjhytVmUGu3TK6DS479gDxC9iQ&s" />
-        </div>
+        <c:choose>
+            <c:when test="${not empty authUser}">
+                <a href="${pageContext.request.contextPath}/profile" class="h-9 w-9 rounded-full overflow-hidden border border-slate-200 block">
+                    <c:choose>
+                        <c:when test="${not empty sessionScope.profilePhoto}">
+                            <img alt="User profile" src="${sessionScope.profilePhoto}" class="h-full w-full object-cover" />
+                        </c:when>
+                        <c:otherwise>
+                            <img alt="User profile" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbLn77P1T_bjhytVmUGu3TK6DS479gDxC9iQ&s" class="h-full w-full object-cover" />
+                        </c:otherwise>
+                    </c:choose>
+                </a>
+            </c:when>
+            <c:otherwise>
+                <a href="${pageContext.request.contextPath}/auth/login" class="px-3 py-1 rounded text-sm font-medium bg-primary text-on-primary">Sign in</a>
+            </c:otherwise>
+        </c:choose>
 
 
     </div>

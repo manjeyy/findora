@@ -108,6 +108,7 @@ public class ProfileServlet extends HttpServlet {
             String photoUrl = saveUploadedImage(request);
             if (photoUrl != null) {
                 userDAO.updateProfilePhoto(userId, photoUrl);
+                request.getSession().setAttribute("profilePhoto", photoUrl);
                 response.sendRedirect(request.getContextPath() + "/profile?status=upload_success");
             } else {
                 response.sendRedirect(request.getContextPath() + "/profile?status=upload_failed");
